@@ -18,7 +18,7 @@ all: get-nsimd
 	@for i in `ls bin`; do echo $${i}; ./bin/$${i}; done
 
 clean:
-	rm -f *
+	rm -f bin/*
 	rm -rf nsimd
 	
 get-nsimd:
