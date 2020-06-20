@@ -52,32 +52,32 @@ void save( std::string const filename, std::vector< T, boost::alignment::aligned
 
 int main( int argc, char * argv[] )
 {
-  vfill( "../data/ig_hexa_gll_glonum.dat", ig_hexa_gll_glonum );
+  vfill( "data/ig_hexa_gll_glonum.dat", ig_hexa_gll_glonum );
 
-  vfill( "../data/rg_gll_displacement.dat", rg_gll_displacement );
-  vfill( "../data/rg_gll_lagrange_deriv.dat", rg_gll_lagrange_deriv );
+  vfill( "data/rg_gll_displacement.dat", rg_gll_displacement );
+  vfill( "data/rg_gll_lagrange_deriv.dat", rg_gll_lagrange_deriv );
 
-  vfill( "../data/rg_hexa_gll_dxidx.dat", rg_hexa_gll_dxidx );
-  vfill( "../data/rg_hexa_gll_dxidy.dat", rg_hexa_gll_dxidy );
-  vfill( "../data/rg_hexa_gll_dxidz.dat", rg_hexa_gll_dxidz );
+  vfill( "data/rg_hexa_gll_dxidx.dat", rg_hexa_gll_dxidx );
+  vfill( "data/rg_hexa_gll_dxidy.dat", rg_hexa_gll_dxidy );
+  vfill( "data/rg_hexa_gll_dxidz.dat", rg_hexa_gll_dxidz );
 
-  vfill( "../data/rg_hexa_gll_detdx.dat", rg_hexa_gll_detdx );
-  vfill( "../data/rg_hexa_gll_detdy.dat", rg_hexa_gll_detdy );
-  vfill( "../data/rg_hexa_gll_detdz.dat", rg_hexa_gll_detdz );
+  vfill( "data/rg_hexa_gll_detdx.dat", rg_hexa_gll_detdx );
+  vfill( "data/rg_hexa_gll_detdy.dat", rg_hexa_gll_detdy );
+  vfill( "data/rg_hexa_gll_detdz.dat", rg_hexa_gll_detdz );
 
-  vfill( "../data/rg_hexa_gll_dzedx.dat", rg_hexa_gll_dzedx );
-  vfill( "../data/rg_hexa_gll_dzedy.dat", rg_hexa_gll_dzedy );
-  vfill( "../data/rg_hexa_gll_dzedz.dat", rg_hexa_gll_dzedz );
+  vfill( "data/rg_hexa_gll_dzedx.dat", rg_hexa_gll_dzedx );
+  vfill( "data/rg_hexa_gll_dzedy.dat", rg_hexa_gll_dzedy );
+  vfill( "data/rg_hexa_gll_dzedz.dat", rg_hexa_gll_dzedz );
 
-  vfill( "../data/rg_hexa_gll_rhovp2.dat", rg_hexa_gll_rhovp2 );
-  vfill( "../data/rg_hexa_gll_rhovs2.dat", rg_hexa_gll_rhovs2 );
-  vfill( "../data/rg_hexa_gll_jacobian_det.dat", rg_hexa_gll_jacobian_det );
-  vfill( "../data/rg_gll_weight.dat", rg_gll_weight );
-  vfill( "../data/rg_gll_acceleration_before_loop_iel.dat", rg_gll_acceleration );
+  vfill( "data/rg_hexa_gll_rhovp2.dat", rg_hexa_gll_rhovp2 );
+  vfill( "data/rg_hexa_gll_rhovs2.dat", rg_hexa_gll_rhovs2 );
+  vfill( "data/rg_hexa_gll_jacobian_det.dat", rg_hexa_gll_jacobian_det );
+  vfill( "data/rg_gll_weight.dat", rg_gll_weight );
+  vfill( "data/rg_gll_acceleration_before_loop_iel.dat", rg_gll_acceleration );
 
   std::vector< float, boost::alignment::aligned_allocator< float, 32 > > out_ref;
-  //vfill( "../data/rg_gll_acceleration_after_loop_iel.dat", out_ref );
-  vfill( "main-f90.dat", out_ref );
+  vfill( "data/rg_gll_acceleration_after_loop_iel.dat", out_ref );
+  //vfill( "main-f90.dat", out_ref );
 
   auto start = std::chrono::system_clock::now();
 
