@@ -1,6 +1,6 @@
 # Make what is possible
 
-COMMON     = -std=c++11 -O3 -Icifo4/include cifo4/src/main.cpp
+COMMON     = -std=c++11 -O3 -g -Icifo4/include cifo4/src/main.cpp
 NSIMD_URL  = "git@github.com:agenium-scale/nsimd.git"
 NSIMD_URL2 = "https://github.com/agenium-scale/nsimd.git"
 
@@ -43,6 +43,11 @@ gcc-neon-nsimd:
 	g++ -DAARCH64 -Insimd/include $(COMMON) \
 	    cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
+gcc-neon-nsimd2:
+	mkdir -p bin
+	g++ -DAARCH64 -Insimd/include $(COMMON) \
+	    cifo4/src/cifo4-nsimd-adv-local-2.cpp -o bin/$@
+
 gcc-sve-intrinsics:
 	mkdir -p bin
 	g++ -march=armv8-a+sve -msve-vector-bits=512 $(COMMON) \
@@ -51,6 +56,29 @@ gcc-sve-intrinsics:
 gcc-sve-nsimd:
 	mkdir -p bin
 	g++ -DSVE512 -march=armv8-a+sve -msve-vector-bits=512 -Insimd/include \
+	    $(COMMON) cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+clang-scalar:
+	mkdir -p bin
+	clang++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
+
+clang-neon-intrinsics:
+	mkdir -p bin
+	clang++ $(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
+
+clang-neon-nsimd:
+	mkdir -p bin
+	clang++ -DAARCH64 -Insimd/include $(COMMON) \
+	    cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+clang-sve-intrinsics:
+	mkdir -p bin
+	clang++ -march=armv8-a+sve -msve-vector-bits=512 $(COMMON) \
+	    cifo4/src/cifo4-sve-local.cpp -o bin/$@
+
+clang-sve-nsimd:
+	mkdir -p bin
+	clang++ -DSVE512 -march=armv8-a+sve -msve-vector-bits=512 -Insimd/include \
 	    $(COMMON) cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 armclang-scalar:

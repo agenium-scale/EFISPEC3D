@@ -1,5 +1,7 @@
 #include <vector>
 #include <cstdint>
+#include <ctime>
+#include <algorithm>
 
 #include <boost/align/aligned_allocator.hpp>
 
@@ -27,3 +29,20 @@ extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg
 
 
 void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end );
+
+inline double tic() {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (double)ts.tv_nsec + (double)ts.tv_sec * 10e9;
+}
+
+inline double avg(std::vector<double> const &v) {
+  double acc = 0.0;
+  std::vector<double> tmp(v);
+  std::sort(tmp.begin(), tmp.end());
+  size_t middle = tmp.size() / 2;
+  for (size_t i = middle - 20; i < middle + 20; i++) {
+    acc += tmp[i];
+  }
+  return acc / 40.0;
+}

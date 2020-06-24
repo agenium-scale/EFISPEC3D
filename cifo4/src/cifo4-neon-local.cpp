@@ -71,15 +71,10 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
   float32x4_t * intpy3 = &local[  875 ];
   float32x4_t * intpz3 = &local[ 1000 ];
 
-
-  for( std::size_t iel = elt_start ; iel < elt_end ; iel += 4 )
+  for( std::size_t iel = elt_start ; iel + 4 <= elt_end ; iel += 4 )
   {
 
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
+    tt = tic();
 
     for( std::size_t k = 0 ; k < 5 ; ++k )
     {
@@ -111,12 +106,6 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
       }
     }
 
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-    __asm__ __volatile__ ("mov x0, x0");
-
 /*
     for( std::size_t i = 0 ; i < 125*3*4 ; ++i )
     {
@@ -124,12 +113,14 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
     }
     std::cout << std::endl;
   */
+
     for( std::size_t k = 0 ; k < 5 ; ++k )
     {
       for( std::size_t l = 0 ; l < 5 ; ++l )
       {
         for( std::size_t m = 0 ; m < 5 ; ++m )
         {
+
           auto coeff = vdupq_n_f32( rg_gll_lagrange_deriv[ IDX2( 0, m ) ] );
 
           auto index = 0 + 3 * IDX3( 0, l, k );
@@ -363,6 +354,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
           intpz1[ IDX3( m, l, k ) ] = tmp * (tauxz*dxidx+tauyz*dxidy+tauzz*dxidz);
           intpz2[ IDX3( m, l, k ) ] = tmp * (tauxz*detdx+tauyz*detdy+tauzz*detdz);
           intpz3[ IDX3( m, l, k ) ] = tmp * (tauxz*dzedx+tauyz*dzedy+tauzz*dzedz);
+
 /*
           for( std::size_t i = 0 ; i < 4 ; ++i )
           {
@@ -481,8 +473,14 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 
         }
       }
+
     }
 
   }
+
+  //std::cout << "[intrin] 1 = " << avg(tt_firstloop) << "\n";
+  ////std::cout << "[intrin] 2.1 = " << avg(tt_midloop1) << "\n";
+  //std::cout << "[intrin] 2.2 = " << avg(tt_midloop2) << "\n";
+  //std::cout << "[intrin] 3 = " << avg(tt_lastloop) << "\n";
 
 }
