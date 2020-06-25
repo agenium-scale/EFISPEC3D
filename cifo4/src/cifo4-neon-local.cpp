@@ -74,7 +74,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
   for( std::size_t iel = elt_start ; iel + 4 <= elt_end ; iel += 4 )
   {
 
-    tt = tic();
+    //tt = tic();
 
     for( std::size_t k = 0 ; k < 5 ; ++k )
     {

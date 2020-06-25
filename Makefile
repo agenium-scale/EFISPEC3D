@@ -4,18 +4,8 @@ COMMON     = -std=c++11 -O3 -g -Icifo4/include cifo4/src/main.cpp
 NSIMD_URL  = "git@github.com:agenium-scale/nsimd.git"
 NSIMD_URL2 = "https://github.com/agenium-scale/nsimd.git"
 
-all: get-nsimd
-	-make -s gcc-scalar
-	-make -s gcc-neon-intrinsics
-	-make -s gcc-neon-nsimd
-	-make -s gcc-sve-intrinsics
-	-make -s gcc-sve-nsimd
-	-make -s armclang-scalar
-	-make -s armclang-neon-intrinsics
-	-make -s armclang-neon-nsimd
-	-make -s armclang-sve-intrinsics
-	-make -s armclang-sve-nsimd
-	@for i in `ls bin`; do echo $${i}; ./bin/$${i}; done
+all:
+	echo "Nothing to do"
 
 clean:
 	rm -f bin/*
