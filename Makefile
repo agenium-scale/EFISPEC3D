@@ -22,7 +22,8 @@ get-nsimd:
             python nsimd/egg/hatch.py -lf )
 
 get-data:
-	git clone $(DATA_URL)
+	[ -e "data/README.md" ] && ( git -C data pull ) \
+	|| git clone $(DATA_URL) data
 
 gcc-scalar:
 	mkdir -p bin
