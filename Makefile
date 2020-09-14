@@ -3,6 +3,7 @@
 COMMON     = -std=c++11 -O3 -g -Icifo4/include cifo4/src/main.cpp
 NSIMD_URL  = "git@github.com:agenium-scale/nsimd.git"
 NSIMD_URL2 = "https://github.com/agenium-scale/nsimd.git"
+DATA_URL   = "ssh://git@phabricator2.numscale.com/diffusion/153/efispec-data.git"
 
 all:
 	echo "Nothing to do"
@@ -19,6 +20,9 @@ get-nsimd:
 	( python3 --version 1>/dev/null 2>/dev/null && \
             python3 nsimd/egg/hatch.py -lf || \
             python nsimd/egg/hatch.py -lf )
+
+get-data:
+	git clone $(DATA_URL)
 
 gcc-scalar:
 	mkdir -p bin
