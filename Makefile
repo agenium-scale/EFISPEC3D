@@ -10,7 +10,7 @@ all:
 clean:
 	rm -f bin/*
 	rm -rf nsimd
-	
+
 get-nsimd:
 	[ -e "nsimd/README.md" ] && \
             ( git -C nsimd pull ) || \
@@ -24,11 +24,21 @@ gcc-scalar:
 	mkdir -p bin
 	g++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
 
-gcc-neon-intrinsics:
+gcc-neon128:
+	mkdir -p bin
+	arm-linux-gnueabihf-g++ \
+	$(COMMON) -mfpu=neon cifo4/src/cifo4-neon-local.cpp -o bin/$@
+
+gcc-nsimd-neon128:
+	mkdir -p bin
+	arm-linux-gnueabihf-g++ \
+	$(COMMON) -DNEON128 cifo4/src/cifo4-neon-local.cpp -o bin/$@
+
+gcc-aarch64:
 	mkdir -p bin
 	g++ $(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
 
-gcc-neon-nsimd:
+gcc-nsimd-aarch64:
 	mkdir -p bin
 	g++ -DAARCH64 -Insimd/include $(COMMON) \
 	    cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
@@ -38,12 +48,12 @@ gcc-neon-nsimd2:
 	g++ -DAARCH64 -Insimd/include $(COMMON) \
 	    cifo4/src/cifo4-nsimd-adv-local-2.cpp -o bin/$@
 
-gcc-sve-intrinsics:
+gcc-sve512:
 	mkdir -p bin
 	g++ -march=armv8-a+sve -msve-vector-bits=512 $(COMMON) \
 	    cifo4/src/cifo4-sve-local.cpp -o bin/$@
 
-gcc-sve-nsimd:
+gcc-nsimd-sve512:
 	mkdir -p bin
 	g++ -DSVE512 -march=armv8-a+sve -msve-vector-bits=512 -Insimd/include \
 	    $(COMMON) cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
@@ -52,21 +62,21 @@ clang-scalar:
 	mkdir -p bin
 	clang++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
 
-clang-neon-intrinsics:
+clang-aarch64:
 	mkdir -p bin
 	clang++ $(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
 
-clang-neon-nsimd:
+clang-nsimd-aarch64:
 	mkdir -p bin
 	clang++ -DAARCH64 -Insimd/include $(COMMON) \
 	    cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
-clang-sve-intrinsics:
+clang-sve512:
 	mkdir -p bin
 	clang++ -march=armv8-a+sve -msve-vector-bits=512 $(COMMON) \
 	    cifo4/src/cifo4-sve-local.cpp -o bin/$@
 
-clang-sve-nsimd:
+clang-nsimd-sve512:
 	mkdir -p bin
 	clang++ -DSVE512 -march=armv8-a+sve -msve-vector-bits=512 -Insimd/include \
 	    $(COMMON) cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
@@ -75,21 +85,21 @@ armclang-scalar:
 	mkdir -p bin
 	armclang++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
 
-armclang-neon-intrinsics:
+armclang-aarch64:
 	mkdir -p bin
 	armclang++ $(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
 
-armclang-neon-nsimd:
+armclang-nsimd-aarch64:
 	mkdir -p bin
 	armclang++ -DAARCH64 -Insimd/include $(COMMON) \
 	           cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
-armclang-sve-intrinsics:
+armclang-sve512:
 	mkdir -p bin
 	armclang++ -march=armv8-a+sve $(COMMON) cifo4/src/cifo4-sve-local.cpp \
 	           -o bin/$@
 
-armclang-sve-nsimd:
+armclang-nsimd-sve512:
 	mkdir -p bin
 	armclang++ -DSVE -march=armv8-a+sve -Insimd/include \
 	    $(COMMON) cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
