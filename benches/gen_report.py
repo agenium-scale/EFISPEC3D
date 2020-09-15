@@ -148,7 +148,7 @@ using the NSIMD library.
 '''
 
 benches_fr = '''\
-\newpage
+\\newpage
 \\section{{Résultats}}
 {results}
 '''
