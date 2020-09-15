@@ -147,8 +147,9 @@ instructions like (Arm NEON) compared to a scalar version, and the same version
 using the NSIMD library.
 '''
 
-benches_en = '''\
-\\section{{Benches results}}
+benches_fr = '''\
+\newpage
+\\section{{Résultats}}
 {results}
 '''
 
@@ -221,7 +222,7 @@ def gen_intro(root, lang='fr'):
 def gen_benches_list(graph_list, lang='fr'):
     results = '\n'.join('\\input{{graphs/{}}}'.format(f.split('.')[0]) \
                         for f in graph_list)
-    return benches_en.format(results=results)
+    return benches_fr.format(results=results)
 
 ## -----------------------------------------------------------------------------
 
