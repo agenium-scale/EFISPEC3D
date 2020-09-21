@@ -110,11 +110,11 @@ results_template = '''\
 \\end{{scaleframe}}
 '''
 def gen_benches_list(graph_list, lang='fr'):
-    ret = ''
-    results = '\n'.join('\\input{{graphs/{}}}'.format(f.split('.')[0]) \
-                        for f in graph_list)
-    ret += results_template.format(results=results)
-    return ret
+		ret = ''
+		for f in graph_list:
+			results = '\\input{{graphs/{}}}'.format(f.split('.')[0])
+			ret += results_template.format(results=results)
+		return ret
 
 ## -----------------------------------------------------------------------------
 
