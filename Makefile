@@ -31,7 +31,7 @@ gcc-scalar:
 
 gcc-neon128:
 	mkdir -p bin
-	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=softp\
+	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=softp \
 	$(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
 
 gcc-nsimd-neon128:
