@@ -5,7 +5,28 @@ import argparse
 ## -----------------------------------------------------------------------------
 
 template = '''\
-\\subsection{{Benches results for {simd_ext}}}
+\\subsection{{Résultats des benches pour {simd_ext}}}
+\\begin{{figure}}[!ht]
+\\centering
+\\begin{{tikzpicture}}
+\\begin{{axis}}[
+    ybar, ymin=0, bar width=1.5cm,
+    ylabel={{Execution time(ms)}},
+    symbolic x coords={{scalar, {simd_ext}, nsimd-{simd_ext}}},
+    xtick=data]
+\\addplot coordinates {{
+        (scalar, {val0}) 
+        ({simd_ext}, {val1}) 
+        (nsimd-{simd_ext}, {val2})}};
+\\end{{axis}}
+\\end{{tikzpicture}}
+\\end{{figure}}
+'''
+
+slides_template = '''\
+\\begin{{itemize}}
+  \\item Résultats des benches pour {simd_ext}
+\\end{{itemize}}
 \\begin{{figure}}[!ht]
 \\centering
 \\begin{{tikzpicture}}
@@ -36,6 +57,8 @@ def parse_args():
                         help='SIMD extension')
     parser.add_argument('--tmp-dir', type=str, required=True,
                         help='Tmp dir')
+    parser.add_argument('--slides', action='store_true',
+                        help='Specify if graphs are generated for slides')
     return parser.parse_args()
 
 if __name__ == '__main__':
@@ -44,6 +67,7 @@ if __name__ == '__main__':
     root = args.tmp_dir
     out_dir = os.path.join(root, 'tex/graphs')
     out_file = os.path.join(out_dir, simd_ext + '.tex')
+    slides = args.slides
     
     scalar = os.path.join(root, 'scalar.log')
     simd = os.path.join(root, simd_ext + '.log')
@@ -53,7 +77,12 @@ if __name__ == '__main__':
     val1 = read_value(simd)
     val2 = read_value(nsimd)
 
-    with open(out_file, 'w') as fp:
-        fp.write(template.format(simd_ext=simd_ext,
-                                 val0=val0, val1=val1, val2=val2))
-    
+    if slides:
+        with open(out_file, 'w') as fp:
+            fp.write(slides_template.format(simd_ext=simd_ext,
+                                            val0=val0, val1=val1, val2=val2))
+    else:
+        with open(out_file, 'w') as fp:
+            fp.write(template.format(simd_ext=simd_ext,
+                                     val0=val0, val1=val1, val2=val2))
+        

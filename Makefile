@@ -23,7 +23,7 @@ get-nsimd:
 
 get-data:
 	[ -e "data/README.md" ] && ( git -C data pull ) \
-	|| git clone $(DATA_URL) data
+	|| ( git clone $(DATA_URL) data )
 
 gcc-scalar:
 	mkdir -p bin

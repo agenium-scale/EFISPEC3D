@@ -1,3 +1,6 @@
+# Use utf-8 encoding
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import argparse
@@ -65,10 +68,35 @@ Un programme écrit à l'aide de NSIMD n'a besoin que d'être
 \\end{{scaleframe}}
 
 \\scalesectionframe{{Application}}{{Calcul d'éléments finis spectraux 3D}}
+\\begin{{scaleframe}}{{Application}}{{EFISPEC3D}}
+\\centering
+EFISPEC3D\\footnote{{http://efispec.free.fr/}} est une bibliothèque logicielle de 
+simulation sismique utilisant la méthode de éléments spectraux finis en 3D.
+\\hfill
+\\newline
+\\includegraphics[width=.3\\textwidth]{{img/efispec1.png}}
+\\includegraphics[width=.3\\textwidth]{{img/efispec2.png}}
+
+\\begin{{itemize}}
+  \\item Très utilisée pour la simulation numérique
+  \\item Nécessité d'optimiser le code manuellement
+\\end{{itemize}}
+\\end{{scaleframe}}
+
+\\begin{{scaleframe}}{{Application}}{{Utilisation de NSIMD sur EFISPEC3D}}
+Utilisation de NSIMD pour la vectorisation du noyau de calcul de l'algorithme
+EFISPEC3D.
+\\newline
+Comparaison de NSIMD par rapport aux instructions natives pour :
+\\begin{{itemize}}
+  \\item NEON128
+  \\item AACH64
+\\end{{itemize}}
+Tests compilés avec {comp} sur un processeur {arch}.
+\\end{{scaleframe}}
 
 
-{results}
-
+{benches}
 
 \\end{{document}}
 
@@ -76,17 +104,40 @@ Un programme écrit à l'aide de NSIMD n'a besoin que d'être
 
 ## -----------------------------------------------------------------------------
 
+results_template = '''\
+\\begin{{scaleframe}}{{Application}}{{Résultats}}
+{results}
+\\end{{scaleframe}}
+'''
+def gen_benches_list(graph_list, lang='fr'):
+    ret = ''
+    results = '\n'.join('\\input{{graphs/{}}}'.format(f.split('.')[0]) \
+                        for f in graph_list)
+    ret += results_template.format(results=results)
+    return ret
+
+## -----------------------------------------------------------------------------
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--tmp-dir', type=str, required=True,
                         help='Tmp dir location')
+    parser.add_argument('--comp', type=str, required=True)
+    parser.add_argument('--arch', type=str, required=True)
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = parse_args()
+    comp = args.comp
+    arch = args.arch
     tmp_dir = args.tmp_dir
     out_dir = os.path.join(tmp_dir, 'tex')
-    out_file = os.path.join(out_dir, 'slides_efisepc3d.tex')
+    out_file = os.path.join(out_dir, 'slides_efispec3d.tex')
+    graphs_dir = os.path.join(tmp_dir, 'tex/graphs')
+    graphs = os.listdir(graphs_dir)
     src = src_fr
+
+    benches = gen_benches_list(graphs, 'en')
+    
     with open(out_file, 'w') as fp:
-        fp.write(src.format(results=''))
+        fp.write(src.format(benches=benches, comp=comp, arch=arch))

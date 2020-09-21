@@ -1,3 +1,6 @@
+# Use utf-8 encoding
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import argparse
@@ -130,21 +133,6 @@ vectorisée à l'aide de NSIMD.
 
 \\input{figures/efispec}
 
-
-'''
-
-intro_en = '''\
-\\maketitle
-\\clearpage
-\\pagenumbering{gobble}
-
-\\section{Introduction}
-\\subsection{About this document}
-This document presents the results of the execution of a 3D finite spectral 
-elements kernel over different architectures. This document shows the execution
-times of the kernel with different setup, including SIMD using native 
-instructions like (Arm NEON) compared to a scalar version, and the same version
-using the NSIMD library.
 '''
 
 benches_fr = '''\
@@ -157,7 +145,7 @@ benches_fr = '''\
 
 comp_version_template = '''\
 \\subsection{{Compiler version}}
-\\begin{{lstlisting}}[frame=single]
+\\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
 '''
@@ -168,7 +156,7 @@ def get_compiler_version(root, lang='fr'):
 
 os_descr_template = '''\
 \\subsection{{Système d'exploitation}}
-\\begin{{lstlisting}}[frame=single]
+\\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
 '''
@@ -179,7 +167,7 @@ def get_os_description(root, lanf='fr'):
 
 cpu_info_template = '''\
 \\subsection{{Informations sur l'architecture CPU}}
-\\begin{{lstlisting}}[frame=single]
+\\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
 '''
@@ -190,7 +178,7 @@ def get_cpu_info(root, lang='fr'):
 
 mem_info_template = '''\
 \\subsection{{Informations sur la RAM}}
-\\begin{{lstlisting}}[frame=single]
+\\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
 '''
@@ -201,7 +189,7 @@ def get_mem_info(root, lang='fr'):
 
 libc_info_template = '''\
 \\subsection{{Information sur la bibliothèque standard}}
-\\begin{{lstlisting}}[frame=single]
+\\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
 '''
