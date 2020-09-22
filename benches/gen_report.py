@@ -27,7 +27,7 @@ Ce document présente les résultats de l'exécution d'un noyau de calcul pour l
 méthode des éléments finis spectraux 3D (EFISPEC3D) sur différentes 
 architectures matérielles. Pour chacun des cas, nous avons utilisé trois 
 versions différentes de l'algorithme : une version scalaire de référence, une 
-version vectorisée à l'aide du jeu SIMD nati de l'architecture cible, et une
+version vectorisée à l'aide du jeu SIMD natif de l'architecture cible, et une
 version utilisant notre bibliothèque de calcul NSIMD.
 
 \\section{La bibliothèque NSIMD}
@@ -98,13 +98,13 @@ support pour les nombres à virgule flottante sur $16$ bits.
 \\subsection{Interfaces de programmation proposées}
 NSIMD est compatible avec les standards C89, C++98, C++11 et C++14. Elle propose
 trois interfaces de
-programmation\footnote{https://agenium-scale.github.io/nsimd/index.html}. La
+programmation\\footnote{https://agenium-scale.github.io/nsimd/index.html}. La
 première est une interface C, et propose des opérateurs de la forme :
-\\texttt{nsimd\\_\\{op\\}\\_ \\{ext\}\\_\\{type\\}([args])}. Où \\texttt{op} 
-est le nom de l'opérateur utilisé, \\texttt{ext} représente l'extension SIMD 
-utilisée, et \\texttt{type} représente le type utilisé, il peut être de la forme :
-\\texttt{\\{i, u, f\\}\\{8, 16, 32, 64\\}}.  Ce code est rendu générique par la
-définition de macros permettant d'écrire un code de la forme:
+\\texttt{nsimd\\_\\{op\\}\\_ \\{ext\}\\_\\{type\\}([args])}. Où \\texttt{op} est
+le nom de l'opérateur utilisé, \\texttt{ext} représente l'extension SIMD
+utilisée, et \\texttt{type} représente le type utilisé, il peut être de la forme
+: \\texttt{\\{i, u, f\\}\\{8, 16, 32, 64\\}}.  Ce code est rendu générique par
+la définition de macros permettant d'écrire un code de la forme:
 \\texttt{v\{op\}([args], \{type\})}. La définition de l'architecture cible à la
 compilation permet d'appeler les bonnes fonctions.
 
@@ -112,9 +112,9 @@ Les deux autres interfaces de programmation sont des interfaces C++. La premièr
 interface fournit des opérateurs génériques de la forme :
 \\texttt{nsimd::\\{op\\}([args], type())}, le type à utiliser étant défini en
 paramètre. Enfin, la deuxième interface définit un type générique
-\\texttt{nsimd::pack <\\{type\\}, \\{N\\}>} représentant un registre SIMD ainsi qu'un
-niveau de déroulage {\\tt N} (par défaut {\\tt 1}), permettant un déroulage
-automatique des boucles. Les opérateurs sont sous la forme générique :
+\\texttt{nsimd::pack <\\{type\\}, \\{N\\}>} représentant un registre SIMD ainsi
+qu'un niveau de déroulage {\\tt N} (par défaut {\\tt 1}), permettant un
+déroulage automatique des boucles. Les opérateurs sont sous la forme générique :
 \\texttt{nsimd::{op}<\\{type\\}>([args])}.
 
 \\section{Application au calcul d'éléments finis spectraux}
@@ -122,14 +122,14 @@ automatique des boucles. Les opérateurs sont sous la forme générique :
 EFISPEC3D\\footnote{http://efispec.free.fr/} est une bibliothèque logicielle de 
 simulation sismique utilisant la méthode de éléments spectraux finis en 3D.
 
-Cette bibliothèque est très répandue pour la simulation sismique, et l'optimisation
-de ses performances est un enjeu important pour accélérer la rapidité des 
-simulations. Actuellement, les optimisations de cet algorithme reposent sur les
-capacités des processeurs à auto-vecotriser du code. Cependant, les gains en
-performances ne sont pas aussi bons qu'en vectorisant explicitement le code.
-Nous comparons ici les performances du cde de calcul d'EFISPEC3D vectorisées
-explicitement pour une architecture particulière, et une version équivalente
-vectorisée à l'aide de NSIMD.
+Cette bibliothèque est très répandue pour la simulation sismique, et
+l'optimisation de ses performances est un enjeu important pour accélérer la
+rapidité des simulations. Actuellement, les optimisations de cet algorithme
+reposent sur les capacités des processeurs à auto-vecotriser du code. Cependant,
+les gains en performances ne sont pas aussi bons qu'en vectorisant explicitement
+le code.  Nous comparons ici les performances du cde de calcul d'EFISPEC3D
+vectorisées explicitement pour une architecture particulière, et une version
+équivalente vectorisée à l'aide de NSIMD.
 
 \\input{figures/efispec}
 
@@ -139,6 +139,115 @@ benches_fr = '''\
 \\newpage
 \\section{{Résultats}}
 {results}
+'''
+
+intro_en = '''\
+\\scaletitle{Results of the benches for NSIMD on a finite spectral elements 
+  computation kernel}
+
+\\section{About this document}
+
+This document presents the results of the execution of a computational kernel
+for the 3D finite spectral elements method on different material
+architectures. For each case, we have used three different versions of the
+algorithm: a scalar reference version, a vectorized version using the native
+SIMD instruction set for the target architecture, and a version using our NSIMD
+computation library.
+
+\\section{The NSIMD library}
+
+Agenium Scale develops and maintains the open source NSIMD library. The first
+version of the library is now available on
+Guthub\\footnote{https://github.com/agenium-scale/nsimd}. NSIMD is a C/C++
+library allowing to write SIMD code independently of a particular material
+architecture. A code written using NSIMD can thus be executed on all the
+supported architectures, which reduces the costs of development related to the
+vectorization of an algorithm.
+
+NSIMD proposes generic SIMD operators which are, if possible, single wrappers to
+corresponding operators in the target architecture. This is the case for basic
+artithmetic instructions, such as additions or multiplications for
+example. Otherwise, the operators are emulated, preferably using SIMD
+register-to-register operations.
+
+NSIMD is not the only vectorization library offering an abstraction of vector
+operation, but as far as we know, is the only one the proposes a support for the
+newest Arm SVE instruction set. NSIMD also allows the use of length-agnostic
+register types, it is then possible to generated optimized executales on an
+architecture whre the register sizes are fixed, or known at the execution.
+
+\\subsection{Functionning}
+
+The NSIMD library relies on the compiler's ability to inline functions (i.e.,
+replace their calls in the program with the corresponding code) when using the
+option of adequate compilation (usually {\\tt -O2} and beyond). In this way, a
+call to a function of NSIMD is directly replaced by the corresponding SIMD code
+or operator. This makes it possible to abstract an SIMD code without extra
+cost. Major compilers, such as GCC, Clang, ICC and MSVC, offer this optimization
+pass. In order to allow these optimizations, most of the NSIMD source code is
+placed in header files, and only the biggest functions are placed separatein
+source files that are compiled as a dynamic library.
+
+\\subsection{Supported instruction sets}
+
+Currently, NSIMD supports the following instruction sets:
+\\begin{itemize}
+\\item[$\\bullet$] Intel :
+  \\begin{itemize}
+  \\item[-] SSE2
+  \\item[-] SSE4.2
+  \\item[-] AVX
+  \\item[-] AVX2
+  \\item[-] AVX512 (support for KNL and Xeon Skylake)
+  \\end{itemize}
+\\item[$\\bullet$] Arm :
+  \\begin{itemize}
+  \\item[-] NEON 128 bits (ARmv7 ans Aarch64)
+  \\item[-] SVE
+  \\end{itemize}
+\\end{itemize}
+
+\\subsection{Supported types}
+
+NSIMD supports all the signed and unsigned integer types from $8$ to $64$
+bits. It also supports $16$, $32$ and $64$ bit floatting-point types. When
+16-bit floatting point types are not natively supported by the target
+architecture, their operation is emulated. As far as we know, NSIMD is also the
+only SIMD library that supports 16-bit floatting point instructions.
+
+\\subsection{Proposed programming interfaces}
+
+NSIMD is compatible with C89, C++98, C++11 and C++14 standards and offers three
+programming
+interfaces\\footnote{https://agenium-scale.github.io/nsimd/index.html}. The
+first one is a C interface, and proposes operators of the form : {\\tt
+nsimd_{op}_ \\{ext\\}_\\{type\\}([args])}. Where {\\tt op} is the name of the
+operator used, {\\tt ext} represents the SIMD extension used, and {\\tt type}
+represents the type used, it can be of the form: {\\tt \\{i, u, f\\}\\{8, 16,
+32, 64\\}}. This code is made generic by defining macros allowing to write a
+code of the form : {\\tt v\\{op\\}([args], \\{type\\})}. The definition of the
+target architecture at compile time allows to call the right functions. The
+other two programming interfaces are C++ interfaces. The first interface
+provides generic operators of the form: {\\tt nsimd::\\{op\\}([args], type())},
+the type to use is defined as the last parameter. Finally, the second interface
+defines a generic type {\\tt nsimd::pack <\\{type\\}, \\{N\\}>} representing a
+SIMD register as well as an unroll factor N (by default 1), allowing automatic
+unrolling in loops. The operators are in the generic form: {\\tt
+nsimd::op<\\{type\\}>([args])}.
+
+\\section{Application to the finite spectral elements computation}
+
+EFISPEC3D\\footnote{http://efispec.free.fr/} is a software library for seismic
+simulation using the 3D finite spectral elements.  This library is widely used
+for seismic simulation, and the optimization of its performances is an
+important issue to accelerate the speed of simulations. Currently, optimizations
+of this algorithm are based on the ability of the processors to auto-vectorize
+the code. However, this auto-vectorization is not as good as a manual
+vectorization. We compare the use of NSIMD to optimize the principal computation
+loop of this algorithm and the same code vectorizes with the native instruction
+set. 
+
+\\input{figures/efispec}
 '''
 
 ## -----------------------------------------------------------------------------
@@ -155,7 +264,7 @@ def get_compiler_version(root, lang='fr'):
     return comp_version_template.format(comp_info)    
 
 os_descr_template = '''\
-\\subsection{{Système d'exploitation}}
+\\subsection{{Operating system}}
 \\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
@@ -166,7 +275,7 @@ def get_os_description(root, lanf='fr'):
     return os_descr_template.format(os_info)
 
 cpu_info_template = '''\
-\\subsection{{Informations sur l'architecture CPU}}
+\\subsection{{Information about the CPU architecture}}
 \\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
@@ -177,7 +286,7 @@ def get_cpu_info(root, lang='fr'):
     return cpu_info_template.format(proc_info)
 
 mem_info_template = '''\
-\\subsection{{Informations sur la RAM}}
+\\subsection{{RAM information}}
 \\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
@@ -188,7 +297,7 @@ def get_mem_info(root, lang='fr'):
     return mem_info_template.format(mem_info)
 
 libc_info_template = '''\
-\\subsection{{Information sur la bibliothèque standard}}
+\\subsection{{Information about the standard library}}
 \\begin{{lstlisting}}[frame=single, style=info]
 {}
 \\end{{lstlisting}}
@@ -199,7 +308,7 @@ def get_libc_info(root, lang='fr'):
     return libc_info_template.format(libc_info)
 
 def gen_intro(root, lang='fr'):
-    ret = intro_fr
+    ret = intro_en
     ret += get_compiler_version(root, lang)
     ret += get_os_description(root, lang)
     ret += get_cpu_info(root, lang)
