@@ -349,7 +349,7 @@ def gen_intro(root, lang='fr'):
 def gen_benches_list(graph_list, lang='fr'):
     results = '\n'.join('\\input{{graphs/{}}}'.format(f.split('.')[0]) \
                         for f in graph_list)
-    return benches_fr.format(results=results)
+    return benches_en.format(results=results)
 
 ## -----------------------------------------------------------------------------
 
