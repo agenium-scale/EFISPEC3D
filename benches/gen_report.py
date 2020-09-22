@@ -263,6 +263,23 @@ set.
 \\input{figures/efispec}
 '''
 
+benches_en = '''\
+\\section{{Results}}
+
+This section details the results of the evaluation of the main 3D finite
+spectral element computation loop for each of the considered architectures. In
+each case, we have executed three different versions of this calculation code: a
+scalar version, a version optimized with the instruction set available for the
+considered architecture, and a last version optimized with NSIMD. The objective
+was of course to get closer, using NSIMD, to the performances obtained by
+optimizing the code with the native instructions.
+
+In each case, we have established a graph showing the time taken to execute the
+main loop to perform the calculation on the same data set.
+\\newpage
+{results}
+'''
+
 ## -----------------------------------------------------------------------------
 
 comp_version_template = '''\

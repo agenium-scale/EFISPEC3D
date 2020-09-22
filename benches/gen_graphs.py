@@ -5,7 +5,7 @@ import argparse
 ## -----------------------------------------------------------------------------
 
 template = '''\
-\\subsection{{Résultats des benches pour {simd_ext}}}
+\\subsection{{Benches results for {simd_ext}}}
 \\begin{{figure}}[!ht]
 \\centering
 \\begin{{tikzpicture}}
