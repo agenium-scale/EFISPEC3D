@@ -234,7 +234,7 @@ NSIMD is compatible with C89, C++98, C++11 and C++14 standards and offers three
 programming
 interfaces\\footnote{https://agenium-scale.github.io/nsimd/index.html}. The
 first one is a C interface, and proposes operators of the form : {\\tt
-nsimd_{op}_ \\{ext\\}_\\{type\\}([args])}. Where {\\tt op} is the name of the
+nsimd\\_{op}\\_ \\{ext\\}\\_\\{type\\}([args])}. Where {\\tt op} is the name of the
 operator used, {\\tt ext} represents the SIMD extension used, and {\\tt type}
 represents the type used, it can be of the form: {\\tt \\{i, u, f\\}\\{8, 16,
 32, 64\\}}. This code is made generic by defining macros allowing to write a
