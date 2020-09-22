@@ -136,8 +136,21 @@ vectorisées explicitement pour une architecture particulière, et une version
 '''
 
 benches_fr = '''\
-\\newpage
 \\section{{Résultats}}
+
+Cette section détaille les résultats de l'évaluation de la boucle de calcul 
+principale de calcul des éléments spectraux finis en 3D pour chacun des 
+architectures considérées. Dans chaque cas, nous avons exécuté trois versions
+différentes de ce code de calcul : une version scalaire, une version optimisée
+avec le jeu d'instructions disponible pour l'architecture considérée, et une 
+dernière version optimisée avec NSIMD.
+L'objectif étant bien entendu de se rapprocher, en utilisant NSIMD,  des 
+performances obtenues en optimisant le code avec les instructions natives.
+
+Dans chacun des cas, nous avons établi une un graphe montrant le temps mis 
+pour exécuter la boucle principale pour effectuer le calcul sur un même jeu de 
+données.
+\\newpage
 {results}
 '''
 
