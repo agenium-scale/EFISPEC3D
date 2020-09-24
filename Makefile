@@ -37,7 +37,8 @@ gcc-neon128:
 gcc-nsimd-neon128:
 	mkdir -p bin
 	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=hard \
-	$(COMMON) -DNEON128 cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+	$(COMMON) -DNEON128 -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 gcc-aarch64:
 	mkdir -p bin
