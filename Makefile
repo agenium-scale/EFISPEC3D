@@ -23,7 +23,7 @@ get-nsimd:
 
 get-data:
 	[ -e "data/README.md" ] && ( git -C data pull ) \
-	|| git clone $(DATA_URL) data
+	|| ( git clone $(DATA_URL) data )
 
 gcc-scalar:
 	mkdir -p bin
@@ -31,13 +31,14 @@ gcc-scalar:
 
 gcc-neon128:
 	mkdir -p bin
-	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=softp\
+	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=hard \
 	$(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
 
 gcc-nsimd-neon128:
 	mkdir -p bin
-	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=softp \
-	$(COMMON) -DNEON128 cifo4/src/cifo4-neon-local.cpp -o bin/$@
+	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=hard \
+	$(COMMON) -DNEON128 -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 gcc-aarch64:
 	mkdir -p bin
