@@ -19,7 +19,6 @@ src_fr = '''\
 
 \\section{{NSIMD}}
 \\subsection{{Présentation}}
-\\scalesubsectionframe
 \\begin{{scaleframe}}
 \\centering
 Bibliothèque de calcul C/C++ \\textaccent{{\\textit{{open source}}}} offrant une 
@@ -38,7 +37,6 @@ d'un code de calcul.
 \\end{{scaleframe}}
 
 \\subsection{{Motivations}}
-\\scalesubsectionframe
 \\begin{{scaleframe}}
 Nécessité de vectoriser du code à la main :
 \\begin{{itemize}}
@@ -53,7 +51,6 @@ Besoin de réécrire ce code pour chaque nouveau jeu d'instructions à supporter
 \\end{{scaleframe}}
 
 \\subsection{{Principes}}
-\\scalesubsectionframe
 \\begin{{scaleframe}}
 \\centering
 Utilisation des capacités des compilateurs à inliner des fonctions lors de la 
@@ -102,6 +99,7 @@ Comparaison de NSIMD par rapport aux instructions natives pour :
 Tests compilés avec {comp} sur un processeur {arch}.
 \\end{{scaleframe}}
 
+\\subsection{{Résultats}}
 {benches}
 
 \\end{{document}}
@@ -111,7 +109,7 @@ Tests compilés avec {comp} sur un processeur {arch}.
 ## -----------------------------------------------------------------------------
 
 results_template = '''\
-\\begin{{scaleframe}}{{Application}}{{Résultats}}
+\\begin{{scaleframe}}
 {results}
 \\end{{scaleframe}}
 '''
