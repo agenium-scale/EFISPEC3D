@@ -14,9 +14,10 @@ src_fr = '''\
 \\scaletitleframe{{Bibliothèque NSIMD}}
 {{Application au calcul d'éléments finis spectraux 3D}}
 
-\\scalesectionframe{{NSIMD}}{{Présentation}}
-
-\\begin{{scaleframe}}{{NSIMD}}{{Généralités}}
+\\section{{NSIMD}}
+\\subsection{{Présentation}}
+\\scalesubsectionframe
+\\begin{{scaleframe}}
 \\centering
 Bibliothèque de calcul C/C++ \\textaccent{{\\textit{{open source}}}} offrant une 
 une abstraction sur les jeux d'instructions SIMD des processeurs.
@@ -33,7 +34,9 @@ d'un code de calcul.
 \\end{{itemize}}
 \\end{{scaleframe}}
 
-\\begin{{scaleframe}}{{NSIMD}}{{Motivations}}
+\\subsection{{Motivations}}
+\\scalesubsectionframe
+\\begin{{scaleframe}}
 Nécessité de vectoriser du code à la main :
 \\begin{{itemize}}
   \\item Jeux d'instructions multiples
@@ -46,6 +49,8 @@ pour chaque famille de processeur viblée.
 Besoin de réécrire ce code pour chaque nouveau jeu d'instructions à supporter.
 \\end{{scaleframe}}
 
+\\subsection{{Principes}}
+\\scalesubsectionframe
 \\begin{{scaleframe}}{{NSIMD}}{{Principes}}
 \\centering
 Utilisation des capacités des compilateurs à inliner des fonctions lors de la 
@@ -64,11 +69,11 @@ Un programme écrit à l'aide de NSIMD n'a besoin que d'être
 \\textaccent{{réécrit}}.
 \\end{{scaleframe}}
 
-\\scalesectionframe{{Application}}{{Calcul d'éléments finis spectraux 3D}}
-
+\\section{{Application}}
+\\subsection{{Calcul d'éléments finis spectraux 3D}}
+\\scalesubsectionframe
 
 {results}
-
 
 \\end{{document}}
 
