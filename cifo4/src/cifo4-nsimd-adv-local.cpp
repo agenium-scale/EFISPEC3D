@@ -114,11 +114,11 @@ void compute_internal_forces_order4(std::size_t elt_start,
           pi32 ids = 3 * (tmp - 1);
 
           // no need for mask_store here since no dependencies betwen elements.
-          storea(&rl_displacement_gll[len * (3 * lid + 0)],
+          storeu(&rl_displacement_gll[len * (3 * lid + 0)],
                  gather<pf32>(&rg_gll_displacement2[0], ids));
-          storea(&rl_displacement_gll[len * (3 * lid + 1)],
+          storeu(&rl_displacement_gll[len * (3 * lid + 1)],
                  gather<pf32>(&rg_gll_displacement2[1], ids));
-          storea(&rl_displacement_gll[len * (3 * lid + 2)],
+          storeu(&rl_displacement_gll[len * (3 * lid + 2)],
                  gather<pf32>(&rg_gll_displacement2[2], ids));
         }
       }
@@ -128,21 +128,21 @@ void compute_internal_forces_order4(std::size_t elt_start,
       for (int l = 0; l < 5; ++l) {
 
         auto index = 0 + 3 * IDX3(0, l, k);
-        pf32 f00 = loada<pf32>(&rl_displacement_gll[len * (0 + index)]);
-        pf32 f01 = loada<pf32>(&rl_displacement_gll[len * (1 + index)]);
-        pf32 f02 = loada<pf32>(&rl_displacement_gll[len * (2 + index)]);
-        pf32 f03 = loada<pf32>(&rl_displacement_gll[len * (3 + index)]);
-        pf32 f04 = loada<pf32>(&rl_displacement_gll[len * (4 + index)]);
-        pf32 f05 = loada<pf32>(&rl_displacement_gll[len * (5 + index)]);
-        pf32 f06 = loada<pf32>(&rl_displacement_gll[len * (6 + index)]);
-        pf32 f07 = loada<pf32>(&rl_displacement_gll[len * (7 + index)]);
-        pf32 f08 = loada<pf32>(&rl_displacement_gll[len * (8 + index)]);
-        pf32 f09 = loada<pf32>(&rl_displacement_gll[len * (9 + index)]);
-        pf32 f10 = loada<pf32>(&rl_displacement_gll[len * (10 + index)]);
-        pf32 f11 = loada<pf32>(&rl_displacement_gll[len * (11 + index)]);
-        pf32 f12 = loada<pf32>(&rl_displacement_gll[len * (12 + index)]);
-        pf32 f13 = loada<pf32>(&rl_displacement_gll[len * (13 + index)]);
-        pf32 f14 = loada<pf32>(&rl_displacement_gll[len * (14 + index)]);
+        pf32 f00 = loadu<pf32>(&rl_displacement_gll[len * (0 + index)]);
+        pf32 f01 = loadu<pf32>(&rl_displacement_gll[len * (1 + index)]);
+        pf32 f02 = loadu<pf32>(&rl_displacement_gll[len * (2 + index)]);
+        pf32 f03 = loadu<pf32>(&rl_displacement_gll[len * (3 + index)]);
+        pf32 f04 = loadu<pf32>(&rl_displacement_gll[len * (4 + index)]);
+        pf32 f05 = loadu<pf32>(&rl_displacement_gll[len * (5 + index)]);
+        pf32 f06 = loadu<pf32>(&rl_displacement_gll[len * (6 + index)]);
+        pf32 f07 = loadu<pf32>(&rl_displacement_gll[len * (7 + index)]);
+        pf32 f08 = loadu<pf32>(&rl_displacement_gll[len * (8 + index)]);
+        pf32 f09 = loadu<pf32>(&rl_displacement_gll[len * (9 + index)]);
+        pf32 f10 = loadu<pf32>(&rl_displacement_gll[len * (10 + index)]);
+        pf32 f11 = loadu<pf32>(&rl_displacement_gll[len * (11 + index)]);
+        pf32 f12 = loadu<pf32>(&rl_displacement_gll[len * (12 + index)]);
+        pf32 f13 = loadu<pf32>(&rl_displacement_gll[len * (13 + index)]);
+        pf32 f14 = loadu<pf32>(&rl_displacement_gll[len * (14 + index)]);
 
         pf32 coeff0l = rg_gll_lagrange_deriv2[IDX2(0, l)];
         pf32 coeff1l = rg_gll_lagrange_deriv2[IDX2(1, l)];
@@ -156,11 +156,11 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           auto index = 0 + 3 * IDX3(0, l, k);
 
-          // auto duxdxi = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 0 +
+          // auto duxdxi = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 0 +
           // index ) ] ) * coeff;
-          // auto duydxi = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 1 +
+          // auto duydxi = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 1 +
           // index ) ] ) * coeff;
-          // auto duzdxi = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 2 +
+          // auto duzdxi = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 2 +
           // index ) ] ) * coeff;
 
           auto duxdxi = f00 * coeff;
@@ -169,18 +169,18 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           coeff = rg_gll_lagrange_deriv2[IDX2(1, m)];
 
-          // duxdxi = duxdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duxdxi = duxdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 3 + index ) ] ) * coeff;
-          // duydxi = duydxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duydxi = duydxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 4 + index ) ] ) * coeff;
-          // duzdxi = duzdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duzdxi = duzdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 5 + index ) ] ) * coeff;
 
-          // duxdxi = duxdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duxdxi = duxdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 3 + index ) ] ) * coeff;
-          // duydxi = duydxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duydxi = duydxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 4 + index ) ] ) * coeff;
-          // duzdxi = duzdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duzdxi = duzdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 5 + index ) ] ) * coeff;
 
           //duxdxi = duxdxi + f03 * coeff;
@@ -193,11 +193,11 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           coeff = rg_gll_lagrange_deriv2[IDX2(2, m)];
 
-          // duxdxi = duxdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duxdxi = duxdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 6 + index ) ] ) * coeff;
-          // duydxi = duydxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duydxi = duydxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 7 + index ) ] ) * coeff;
-          // duzdxi = duzdxi + nsimd::loada<pf32>( &rl_displacement_gll[  len *
+          // duzdxi = duzdxi + nsimd::loadu<pf32>( &rl_displacement_gll[  len *
           // ( 8 + index ) ] ) * coeff;
 
           duxdxi = fma(f06, coeff, duxdxi);
@@ -206,11 +206,11 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           coeff = rg_gll_lagrange_deriv2[IDX2(3, m)];
 
-          // duxdxi = duxdxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdxi = duxdxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 9 + index ) ] ) * coeff;
-          // duydxi = duydxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydxi = duydxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 10 + index ) ] ) * coeff;
-          // duzdxi = duzdxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdxi = duzdxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 11 + index ) ] ) * coeff;
 
           duxdxi = fma(f09, coeff, duxdxi);
@@ -219,11 +219,11 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           coeff = rg_gll_lagrange_deriv2[IDX2(4, m)];
 
-          // duxdxi = duxdxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdxi = duxdxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 12 + index ) ] ) * coeff;
-          // duydxi = duydxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydxi = duydxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 13 + index ) ] ) * coeff;
-          // duzdxi = duzdxi + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdxi = duzdxi + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 14 + index ) ] ) * coeff;
 
           duxdxi = fma(f12, coeff, duxdxi);
@@ -234,103 +234,103 @@ void compute_internal_forces_order4(std::size_t elt_start,
 
           // coeff = rg_gll_lagrange_deriv2[ IDX2( 0, l ) ];
 
-          // auto duxdet = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 0 +
+          // auto duxdet = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 0 +
           // 3 * IDX3( m, 0, k ) ) ] ) * coeff;
-          // auto duydet = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 1 +
+          // auto duydet = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 1 +
           // 3 * IDX3( m, 0, k ) ) ] ) * coeff;
-          // auto duzdet = nsimd::loada<pf32>( &rl_displacement_gll[ len * ( 2 +
+          // auto duzdet = nsimd::loadu<pf32>( &rl_displacement_gll[ len * ( 2 +
           // 3 * IDX3( m, 0, k ) ) ] ) * coeff;
 
           auto duxdet =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (0 + 3 * IDX3(m, 0, k))]) *
               coeff0l;
           auto duydet =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (1 + 3 * IDX3(m, 0, k))]) *
               coeff0l;
           auto duzdet =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (2 + 3 * IDX3(m, 0, k))]) *
               coeff0l;
 
           // coeff = rg_gll_lagrange_deriv2[ IDX2( 1, l ) ];
 
-          // duxdet = duxdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdet = duxdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 0 + 3 * IDX3( m, 1, k ) ) ] ) * coeff;
-          // duydet = duydet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydet = duydet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 1 + 3 * IDX3( m, 1, k ) ) ] ) * coeff;
-          // duzdet = duzdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdet = duzdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 2 + 3 * IDX3( m, 1, k ) ) ] ) * coeff;
 
           duxdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 1, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 1, k))]),
               coeff1l, duxdet);
           duydet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 1, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 1, k))]),
               coeff1l, duydet);
           duzdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 1, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 1, k))]),
               coeff1l, duzdet);
 
           // coeff = rg_gll_lagrange_deriv2[ IDX2( 2, l ) ];
 
-          // duxdet = duxdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdet = duxdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 0 + 3 * IDX3( m, 2, k ) ) ] ) * coeff;
-          // duydet = duydet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydet = duydet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 1 + 3 * IDX3( m, 2, k ) ) ] ) * coeff;
-          // duzdet = duzdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdet = duzdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 2 + 3 * IDX3( m, 2, k ) ) ] ) * coeff;
 
           duxdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 2, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 2, k))]),
               coeff2l, duxdet);
           duydet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 2, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 2, k))]),
               coeff2l, duydet);
           duzdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 2, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 2, k))]),
               coeff2l, duzdet);
 
           // coeff = rg_gll_lagrange_deriv2[ IDX2( 3, l ) ];
 
-          // duxdet = duxdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdet = duxdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 0 + 3 * IDX3( m, 3, k ) ) ] ) * coeff;
-          // duydet = duydet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydet = duydet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 1 + 3 * IDX3( m, 3, k ) ) ] ) * coeff;
-          // duzdet = duzdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdet = duzdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 2 + 3 * IDX3( m, 3, k ) ) ] ) * coeff;
 
           duxdet = duxdet +
-                   loada<pf32>(
+                   loadu<pf32>(
                        &rl_displacement_gll[len * (0 + 3 * IDX3(m, 3, k))]) *
                        coeff3l;
           duydet = duydet +
-                   loada<pf32>(
+                   loadu<pf32>(
                        &rl_displacement_gll[len * (1 + 3 * IDX3(m, 3, k))]) *
                        coeff3l;
           duzdet = duzdet +
-                   loada<pf32>(
+                   loadu<pf32>(
                        &rl_displacement_gll[len * (2 + 3 * IDX3(m, 3, k))]) *
                        coeff3l;
 
           // coeff = rg_gll_lagrange_deriv2[ IDX2( 4, l ) ];
 
-          // duxdet = duxdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duxdet = duxdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 0 + 3 * IDX3( m, 4, k ) ) ] ) * coeff;
-          // duydet = duydet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duydet = duydet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 1 + 3 * IDX3( m, 4, k ) ) ] ) * coeff;
-          // duzdet = duzdet + nsimd::loada<pf32>( &rl_displacement_gll[ len * (
+          // duzdet = duzdet + nsimd::loadu<pf32>( &rl_displacement_gll[ len * (
           // 2 + 3 * IDX3( m, 4, k ) ) ] ) * coeff;
 
           duxdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 4, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, 4, k))]),
               coeff4l, duxdet);
           duydet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 4, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, 4, k))]),
               coeff4l, duydet);
           duzdet = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 4, k))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, 4, k))]),
               coeff4l, duzdet);
 
           //
@@ -338,64 +338,64 @@ void compute_internal_forces_order4(std::size_t elt_start,
           coeff = rg_gll_lagrange_deriv2[IDX2(0, k)];
 
           auto duxdze =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 0))]) *
               coeff;
           auto duydze =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 0))]) *
               coeff;
           auto duzdze =
-              loada<pf32>(
+              loadu<pf32>(
                   &rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 0))]) *
               coeff;
 
           coeff = rg_gll_lagrange_deriv2[IDX2(1, k)];
 
           duxdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 1))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 1))]),
               coeff, duxdze);
           duydze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 1))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 1))]),
               coeff, duydze);
           duzdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 1))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 1))]),
               coeff, duzdze);
 
           coeff = rg_gll_lagrange_deriv2[IDX2(2, k)];
 
           duxdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 2))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 2))]),
               coeff, duxdze);
           duydze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 2))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 2))]),
               coeff, duydze);
           duzdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 2))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 2))]),
               coeff, duzdze);
 
           coeff = rg_gll_lagrange_deriv2[IDX2(3, k)];
 
           duxdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 3))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 3))]),
               coeff, duxdze);
           duydze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 3))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 3))]),
               coeff, duydze);
           duzdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 3))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 3))]),
               coeff, duzdze);
 
           coeff = rg_gll_lagrange_deriv2[IDX2(4, k)];
 
           duxdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 4))]),
+              loadu<pf32>(&rl_displacement_gll[len * (0 + 3 * IDX3(m, l, 4))]),
               coeff, duxdze);
           duydze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 4))]),
+              loadu<pf32>(&rl_displacement_gll[len * (1 + 3 * IDX3(m, l, 4))]),
               coeff, duydze);
           duzdze = fma(
-              loada<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 4))]),
+              loadu<pf32>(&rl_displacement_gll[len * (2 + 3 * IDX3(m, l, 4))]),
               coeff, duzdze);
 
           //
@@ -478,25 +478,25 @@ void compute_internal_forces_order4(std::size_t elt_start,
           // vstrides );
           auto tmp = gather_linear<pf32>(&rg_hexa_gll_jacobian_det2[id], 125);
 
-          storea(&intpx1[IDX3(m, l, k)],
+          storeu(&intpx1[IDX3(m, l, k)],
                  tmp * fma(tauxx, dxidx, fma(tauxy, dxidy, tauxz * dxidz)));
-          storea(&intpx2[IDX3(m, l, k)],
+          storeu(&intpx2[IDX3(m, l, k)],
                  tmp * fma(tauxx, detdx, fma(tauxy, detdy, tauxz * detdz)));
-          storea(&intpx3[IDX3(m, l, k)],
+          storeu(&intpx3[IDX3(m, l, k)],
                  tmp * fma(tauxx, dzedx, fma(tauxy, dzedy, tauxz * dzedz)));
 
-          storea(&intpy1[IDX3(m, l, k)],
+          storeu(&intpy1[IDX3(m, l, k)],
                  tmp * fma(tauxy, dxidx, fma(tauyy, dxidy, tauyz * dxidz)));
-          storea(&intpy2[IDX3(m, l, k)],
+          storeu(&intpy2[IDX3(m, l, k)],
                  tmp * fma(tauxy, detdx, fma(tauyy, detdy, tauyz * detdz)));
-          storea(&intpy3[IDX3(m, l, k)],
+          storeu(&intpy3[IDX3(m, l, k)],
                  tmp * fma(tauxy, dzedx, fma(tauyy, dzedy, tauyz * dzedz)));
 
-          storea(&intpz1[IDX3(m, l, k)],
+          storeu(&intpz1[IDX3(m, l, k)],
                  tmp * fma(tauxz, dxidx, fma(tauyz, dxidy, tauzz * dxidz)));
-          storea(&intpz2[IDX3(m, l, k)],
+          storeu(&intpz2[IDX3(m, l, k)],
                  tmp * fma(tauxz, detdx, fma(tauyz, detdy, tauzz * detdz)));
-          storea(&intpz3[IDX3(m, l, k)],
+          storeu(&intpz3[IDX3(m, l, k)],
                  tmp * fma(tauxz, dzedx, fma(tauyz, dzedy, tauzz * dzedz)));
         }
       }
@@ -509,23 +509,23 @@ void compute_internal_forces_order4(std::size_t elt_start,
     for (std::size_t k = 0; k < 5; ++k) {
       for (std::size_t l = 0; l < 5; ++l) {
 
-        pf32 intpx10 = loada<pf32>(&intpx1[IDX3(0, l, k)]);
-        pf32 intpx11 = loada<pf32>(&intpx1[IDX3(1, l, k)]);
-        pf32 intpx12 = loada<pf32>(&intpx1[IDX3(2, l, k)]);
-        pf32 intpx13 = loada<pf32>(&intpx1[IDX3(3, l, k)]);
-        pf32 intpx14 = loada<pf32>(&intpx1[IDX3(4, l, k)]);
+        pf32 intpx10 = loadu<pf32>(&intpx1[IDX3(0, l, k)]);
+        pf32 intpx11 = loadu<pf32>(&intpx1[IDX3(1, l, k)]);
+        pf32 intpx12 = loadu<pf32>(&intpx1[IDX3(2, l, k)]);
+        pf32 intpx13 = loadu<pf32>(&intpx1[IDX3(3, l, k)]);
+        pf32 intpx14 = loadu<pf32>(&intpx1[IDX3(4, l, k)]);
 
-        pf32 intpy10 = loada<pf32>(&intpy1[IDX3(0, l, k)]);
-        pf32 intpy11 = loada<pf32>(&intpy1[IDX3(0, l, k)]);
-        pf32 intpy12 = loada<pf32>(&intpy1[IDX3(0, l, k)]);
-        pf32 intpy13 = loada<pf32>(&intpy1[IDX3(0, l, k)]);
-        pf32 intpy14 = loada<pf32>(&intpy1[IDX3(0, l, k)]);
+        pf32 intpy10 = loadu<pf32>(&intpy1[IDX3(0, l, k)]);
+        pf32 intpy11 = loadu<pf32>(&intpy1[IDX3(0, l, k)]);
+        pf32 intpy12 = loadu<pf32>(&intpy1[IDX3(0, l, k)]);
+        pf32 intpy13 = loadu<pf32>(&intpy1[IDX3(0, l, k)]);
+        pf32 intpy14 = loadu<pf32>(&intpy1[IDX3(0, l, k)]);
 
-        pf32 intpz10 = loada<pf32>(&intpz1[IDX3(0, l, k)]);
-        pf32 intpz11 = loada<pf32>(&intpz1[IDX3(0, l, k)]);
-        pf32 intpz12 = loada<pf32>(&intpz1[IDX3(0, l, k)]);
-        pf32 intpz13 = loada<pf32>(&intpz1[IDX3(0, l, k)]);
-        pf32 intpz14 = loada<pf32>(&intpz1[IDX3(0, l, k)]);
+        pf32 intpz10 = loadu<pf32>(&intpz1[IDX3(0, l, k)]);
+        pf32 intpz11 = loadu<pf32>(&intpz1[IDX3(0, l, k)]);
+        pf32 intpz12 = loadu<pf32>(&intpz1[IDX3(0, l, k)]);
+        pf32 intpz13 = loadu<pf32>(&intpz1[IDX3(0, l, k)]);
+        pf32 intpz14 = loadu<pf32>(&intpz1[IDX3(0, l, k)]);
 
         pf32 lc0 = rg_gll_lagrange_deriv2[IDX2(l, 0)] * rg_gll_weight2[0];
         pf32 lc1 = rg_gll_lagrange_deriv2[IDX2(l, 1)] * rg_gll_weight2[1];
@@ -567,23 +567,23 @@ void compute_internal_forces_order4(std::size_t elt_start,
                       fma(intpz12, c2, fma(intpz13, c3, intpz14 * c4))));
 
           /*
-          auto tmpx1 = nsimd::loada<pf32>( &intpx1[ IDX3( 0, l, k ) ]) * c0
-            + nsimd::loada<pf32>( &intpx1[ IDX3( 1, l, k ) ] ) * c1
-            + nsimd::loada<pf32>( &intpx1[ IDX3( 2, l, k ) ] ) * c2
-            + nsimd::loada<pf32>( &intpx1[ IDX3( 3, l, k ) ] ) * c3
-            + nsimd::loada<pf32>( &intpx1[ IDX3( 4, l, k ) ] ) * c4;
+          auto tmpx1 = nsimd::loadu<pf32>( &intpx1[ IDX3( 0, l, k ) ]) * c0
+            + nsimd::loadu<pf32>( &intpx1[ IDX3( 1, l, k ) ] ) * c1
+            + nsimd::loadu<pf32>( &intpx1[ IDX3( 2, l, k ) ] ) * c2
+            + nsimd::loadu<pf32>( &intpx1[ IDX3( 3, l, k ) ] ) * c3
+            + nsimd::loadu<pf32>( &intpx1[ IDX3( 4, l, k ) ] ) * c4;
 
-          auto tmpy1 = nsimd::loada<pf32>( &intpy1[ IDX3( 0, l, k ) ] ) * c0
-            + nsimd::loada<pf32>( &intpy1[ IDX3( 1, l, k ) ] ) * c1
-            + nsimd::loada<pf32>( &intpy1[ IDX3( 2, l, k ) ] ) * c2
-            + nsimd::loada<pf32>( &intpy1[ IDX3( 3, l, k ) ] ) * c3
-            + nsimd::loada<pf32>( &intpy1[ IDX3( 4, l, k ) ] ) * c4;
+          auto tmpy1 = nsimd::loadu<pf32>( &intpy1[ IDX3( 0, l, k ) ] ) * c0
+            + nsimd::loadu<pf32>( &intpy1[ IDX3( 1, l, k ) ] ) * c1
+            + nsimd::loadu<pf32>( &intpy1[ IDX3( 2, l, k ) ] ) * c2
+            + nsimd::loadu<pf32>( &intpy1[ IDX3( 3, l, k ) ] ) * c3
+            + nsimd::loadu<pf32>( &intpy1[ IDX3( 4, l, k ) ] ) * c4;
 
-          auto tmpz1 = nsimd::loada<pf32>( &intpz1[ IDX3( 0, l, k ) ] ) * c0
-            + nsimd::loada<pf32>( &intpz1[ IDX3( 1, l, k ) ] ) * c1
-            + nsimd::loada<pf32>( &intpz1[ IDX3( 2, l, k ) ] ) * c2
-            + nsimd::loada<pf32>( &intpz1[ IDX3( 3, l, k ) ] ) * c3
-            + nsimd::loada<pf32>( &intpz1[ IDX3( 4, l, k ) ] ) * c4;
+          auto tmpz1 = nsimd::loadu<pf32>( &intpz1[ IDX3( 0, l, k ) ] ) * c0
+            + nsimd::loadu<pf32>( &intpz1[ IDX3( 1, l, k ) ] ) * c1
+            + nsimd::loadu<pf32>( &intpz1[ IDX3( 2, l, k ) ] ) * c2
+            + nsimd::loadu<pf32>( &intpz1[ IDX3( 3, l, k ) ] ) * c3
+            + nsimd::loadu<pf32>( &intpz1[ IDX3( 4, l, k ) ] ) * c4;
           */
 
           /*
@@ -595,25 +595,25 @@ void compute_internal_forces_order4(std::size_t elt_start,
           */
 
           auto tmpx2 =
-              fma(loada<pf32>(&intpx2[IDX3(m, 0, k)]), lc0,
-                  fma(loada<pf32>(&intpx2[IDX3(m, 1, k)]), lc1,
-                      fma(loada<pf32>(&intpx2[IDX3(m, 2, k)]), lc2,
-                          fma(loada<pf32>(&intpx2[IDX3(m, 3, k)]), lc3,
-                              loada<pf32>(&intpx2[IDX3(m, 4, k)]) * lc4))));
+              fma(loadu<pf32>(&intpx2[IDX3(m, 0, k)]), lc0,
+                  fma(loadu<pf32>(&intpx2[IDX3(m, 1, k)]), lc1,
+                      fma(loadu<pf32>(&intpx2[IDX3(m, 2, k)]), lc2,
+                          fma(loadu<pf32>(&intpx2[IDX3(m, 3, k)]), lc3,
+                              loadu<pf32>(&intpx2[IDX3(m, 4, k)]) * lc4))));
 
           auto tmpy2 =
-              fma(loada<pf32>(&intpy2[IDX3(m, 0, k)]), lc0,
-                  fma(loada<pf32>(&intpy2[IDX3(m, 1, k)]), lc1,
-                      fma(loada<pf32>(&intpy2[IDX3(m, 2, k)]), lc2,
-                          fma(loada<pf32>(&intpy2[IDX3(m, 3, k)]), lc3,
-                              loada<pf32>(&intpy2[IDX3(m, 4, k)]) * lc4))));
+              fma(loadu<pf32>(&intpy2[IDX3(m, 0, k)]), lc0,
+                  fma(loadu<pf32>(&intpy2[IDX3(m, 1, k)]), lc1,
+                      fma(loadu<pf32>(&intpy2[IDX3(m, 2, k)]), lc2,
+                          fma(loadu<pf32>(&intpy2[IDX3(m, 3, k)]), lc3,
+                              loadu<pf32>(&intpy2[IDX3(m, 4, k)]) * lc4))));
 
           auto tmpz2 =
-              fma(loada<pf32>(&intpz2[IDX3(m, 0, k)]), lc0,
-                  fma(loada<pf32>(&intpz2[IDX3(m, 1, k)]), lc1,
-                      fma(loada<pf32>(&intpz2[IDX3(m, 2, k)]), lc2,
-                          fma(loada<pf32>(&intpz2[IDX3(m, 3, k)]), lc3,
-                              loada<pf32>(&intpz2[IDX3(m, 4, k)]) * lc4))));
+              fma(loadu<pf32>(&intpz2[IDX3(m, 0, k)]), lc0,
+                  fma(loadu<pf32>(&intpz2[IDX3(m, 1, k)]), lc1,
+                      fma(loadu<pf32>(&intpz2[IDX3(m, 2, k)]), lc2,
+                          fma(loadu<pf32>(&intpz2[IDX3(m, 3, k)]), lc3,
+                              loadu<pf32>(&intpz2[IDX3(m, 4, k)]) * lc4))));
 
           /*
           c0 = rg_gll_lagrange_deriv2[IDX2(k, 0)] * rg_gll_weight2[0];
@@ -624,25 +624,25 @@ void compute_internal_forces_order4(std::size_t elt_start,
           */
 
           auto tmpx3 =
-              fma(loada<pf32>(&intpx3[IDX3(m, l, 0)]), kc0,
-                  fma(loada<pf32>(&intpx3[IDX3(m, l, 1)]), kc1,
-                      fma(loada<pf32>(&intpx3[IDX3(m, l, 2)]), kc2,
-                          fma(loada<pf32>(&intpx3[IDX3(m, l, 3)]), kc3,
-                              loada<pf32>(&intpx3[IDX3(m, l, 4)]) * kc4))));
+              fma(loadu<pf32>(&intpx3[IDX3(m, l, 0)]), kc0,
+                  fma(loadu<pf32>(&intpx3[IDX3(m, l, 1)]), kc1,
+                      fma(loadu<pf32>(&intpx3[IDX3(m, l, 2)]), kc2,
+                          fma(loadu<pf32>(&intpx3[IDX3(m, l, 3)]), kc3,
+                              loadu<pf32>(&intpx3[IDX3(m, l, 4)]) * kc4))));
 
           auto tmpy3 =
-              fma(loada<pf32>(&intpy3[IDX3(m, l, 0)]), kc0,
-                  fma(loada<pf32>(&intpy3[IDX3(m, l, 1)]), kc1,
-                      fma(loada<pf32>(&intpy3[IDX3(m, l, 2)]), kc2,
-                          fma(loada<pf32>(&intpy3[IDX3(m, l, 3)]), kc3,
-                              loada<pf32>(&intpy3[IDX3(m, l, 4)]) * kc4))));
+              fma(loadu<pf32>(&intpy3[IDX3(m, l, 0)]), kc0,
+                  fma(loadu<pf32>(&intpy3[IDX3(m, l, 1)]), kc1,
+                      fma(loadu<pf32>(&intpy3[IDX3(m, l, 2)]), kc2,
+                          fma(loadu<pf32>(&intpy3[IDX3(m, l, 3)]), kc3,
+                              loadu<pf32>(&intpy3[IDX3(m, l, 4)]) * kc4))));
 
           auto tmpz3 =
-              fma(loada<pf32>(&intpz3[IDX3(m, l, 0)]), kc0,
-                  fma(loada<pf32>(&intpz3[IDX3(m, l, 1)]), kc1,
-                      fma(loada<pf32>(&intpz3[IDX3(m, l, 2)]), kc2,
-                          fma(loada<pf32>(&intpz3[IDX3(m, l, 3)]), kc3,
-                              loada<pf32>(&intpz3[IDX3(m, l, 4)]) * kc4))));
+              fma(loadu<pf32>(&intpz3[IDX3(m, l, 0)]), kc0,
+                  fma(loadu<pf32>(&intpz3[IDX3(m, l, 1)]), kc1,
+                      fma(loadu<pf32>(&intpz3[IDX3(m, l, 2)]), kc2,
+                          fma(loadu<pf32>(&intpz3[IDX3(m, l, 3)]), kc3,
+                              loadu<pf32>(&intpz3[IDX3(m, l, 4)]) * kc4))));
 
           //
 

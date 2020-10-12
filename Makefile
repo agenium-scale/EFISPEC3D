@@ -29,6 +29,16 @@ gcc-scalar:
 	mkdir -p bin
 	g++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
 
+gcc-avx:
+	mkdir -p bin
+	g++ $(COMMON) -march=native -mavx \
+	cifo4/src/cifo4-avx-local.cpp -o bin/$@
+
+gcc-nsimd-avx:
+	mkdir -p bin
+	g++ -DAVX -march=native -mavx -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
 gcc-neon128:
 	mkdir -p bin
 	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=hard \
@@ -37,7 +47,7 @@ gcc-neon128:
 gcc-nsimd-neon128:
 	mkdir -p bin
 	arm-linux-gnueabihf-g++ -mfpu=neon -mfloat-abi=hard \
-	$(COMMON) -DNEON128 -Insimd/include $(COMMON) \
+	-DNEON128 -Insimd/include $(COMMON) \
 	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 gcc-aarch64:
