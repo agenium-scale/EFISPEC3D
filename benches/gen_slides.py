@@ -18,7 +18,8 @@ src_fr = '''\
 \\usepackage[utf8]{{inputenc}}
 \\usepackage{{helvet}}
 \\usepackage{{avant}}
-
+\\usepackage{{tikz}}
+\\usepackage{{pgfplots}}
 \\title{{Bibliothèque NSIMD}}
 \\subtitle{{Application au calcul d'éléments spectraux finis 3D}}
 \\date{{\\today}}
@@ -97,11 +98,6 @@ simulation sismique utilisant la méthode de éléments spectraux finis en 3D.
 Utilisation de NSIMD pour la vectorisation du noyau de calcul de l'algorithme
 EFISPEC3D.
 \\newline
-Comparaison de NSIMD par rapport aux instructions natives pour :
-\\begin{{itemize}}
-  \\item NEON128
-  \\item AACH64
-\\end{{itemize}}
 Tests compilés avec {comp} sur un processeur {arch}.
 \\end{{frame}}
 

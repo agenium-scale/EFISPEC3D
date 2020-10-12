@@ -31,12 +31,34 @@ gcc-scalar:
 
 gcc-avx:
 	mkdir -p bin
-	g++ $(COMMON) -march=native -mavx \
+	g++ $(COMMON) -mavx -mfma \
 	cifo4/src/cifo4-avx-local.cpp -o bin/$@
 
 gcc-nsimd-avx:
 	mkdir -p bin
-	g++ -DAVX -march=native -mavx -Insimd/include $(COMMON) \
+	g++ -DAVX -DFMA -mavx -mfma -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+gcc-avx512-knl:
+	mkdir -p bin
+	g++ $(COMMON) -march=native -mavx512_knl -mfma \
+	cifo4/src/cifo4-avx512-local.cpp -o bin/$@
+
+gcc-nsimd-avx512-knl:
+	mkdir -p bin
+	g++ -DAVX512_KNL -DFMA -march=native -mavx512_knl -mfma \
+	-Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+gcc-avx512-skylake:
+	mkdir -p bin
+	g++ $(COMMON) -march=native -mavx512_skylake -mfma \
+	cifo4/src/cifo4-avx512-local.cpp -o bin/$@
+
+gcc-nsimd-avx512-skylake:
+	mkdir -p bin
+	g++ -DAVX512_KNL -DFMA -march=native -mavx512_skylake -mfma \
+	-Insimd/include $(COMMON) \
 	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 gcc-neon128:
@@ -78,6 +100,49 @@ clang-scalar:
 	mkdir -p bin
 	clang++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
 
+clang-avx:
+	mkdir -p bin
+	clang++ $(COMMON) -march=native -mavx -mfma \
+	cifo4/src/cifo4-avx-local.cpp -o bin/$@
+
+clang-nsimd-avx:
+	mkdir -p bin
+	g++ -DAVX -DFMA -mavx -mfma -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+clang-avx512-knl:
+	mkdir -p bin
+	clang++ $(COMMON) -mavx512_knl -mfma \
+	cifo4/src/cifo4-avx512-local.cpp -o bin/$@
+
+clang-nsimd-avx512-knl:
+	mkdir -p bin
+	clang++ -DAVX512_KNL -DFMA -mavx512_knl -mfma \
+	-Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+clang-avx512-skylake:
+	mkdir -p bin
+	clang++ $(COMMON) -mavx512_skylake -mfma \
+	cifo4/src/cifo4-avx512-local.cpp -o bin/$@
+
+clang-nsimd-avx512-skylake:
+	mkdir -p bin
+	clang++ -DAVX512_KNL -DFMA -mavx512_skylake -mfma \
+	-Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
+clang-neon128:
+	mkdir -p bin
+	clang++ -mfpu=neon -mfloat-abi=hard \
+	$(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
+
+clang-nsimd-neon128:
+	mkdir -p bin
+	clang-g++ -mfpu=neon -mfloat-abi=hard \
+	-DNEON128 -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
+
 clang-aarch64:
 	mkdir -p bin
 	clang++ $(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
@@ -100,6 +165,17 @@ clang-nsimd-sve512:
 armclang-scalar:
 	mkdir -p bin
 	armclang++ $(COMMON) cifo4/src/cifo4-local.cpp -o bin/$@
+
+armclang-neon128:
+	mkdir -p bin
+	armclang++ -mfpu=neon -mfloat-abi=hard \
+	$(COMMON) cifo4/src/cifo4-neon-local.cpp -o bin/$@
+
+armclang-nsimd-neon128:
+	mkdir -p bin
+	armclang-g++ -mfpu=neon -mfloat-abi=hard \
+	-DNEON128 -Insimd/include $(COMMON) \
+	cifo4/src/cifo4-nsimd-adv-local.cpp -o bin/$@
 
 armclang-aarch64:
 	mkdir -p bin
