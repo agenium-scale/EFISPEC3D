@@ -8,21 +8,32 @@ import argparse
 ## -----------------------------------------------------------------------------
 
 src_fr = '''\
-\\input{{slides_template}}
+\\documentclass[shrink, compress, mathserif, 10pt, xcolor=dvipsnames,
+  aspectratio=169]{{beamer}}
+\\usetheme{{Scale}}
+
+\\usepackage{{textcomp}}
+\\usepackage[french]{{babel}}
+\\usepackage[T1]{{fontenc}}
+\\usepackage[utf8]{{inputenc}}
+\\usepackage{{helvet}}
+\\usepackage{{avant}}
+
+\\title{{Bibliothèque NSIMD}}
+\\subtitle{{Application au calcul d'éléments spectraux finis 3D}}
+\\date{{\\today}}
+\\author{{Agenium Scale}}
 
 \\begin{{document}}
 
-\\scalefirstframe
+\\begin{{frame}}[plain]
+  \\maketitle
+\\end{{frame}}
 
-\\scaletitleframe{{Bibliothèque NSIMD}}
-{{Application au calcul d'éléments finis spectraux 3D}}
-
-\\section{{NSIMD}}
-\\subsection{{Présentation}}
-\\begin{{scaleframe}}
+\\begin{{frame}}{{NSIMD}}{{Présentation}}
 \\centering
-Bibliothèque de calcul C/C++ \\textaccent{{\\textit{{open source}}}} offrant une 
-une abstraction sur les jeux d'instructions SIMD des processeurs.
+Bibliothèque de calcul C/C++ \\textcolor{{primary}}{{\\textit{{open source}}}} 
+offrant une abstraction sur les jeux d'instructions SIMD des processeurs.
 \\newline
 NSIMD offre une abstraction sur les jeux d'instructions SIMD propres à chaque 
 architecture et permet de réduire les coûts de développement pour l'optimisation
@@ -34,10 +45,9 @@ d'un code de calcul.
   \\item Compatible avec C89, C++98, C++11.
   \\item Abstraction sans coût supplémentaire.
 \\end{{itemize}}
-\\end{{scaleframe}}
+\\end{{frame}}
 
-\\subsection{{Motivations}}
-\\begin{{scaleframe}}
+\\begin{{frame}}{{NSIMD}}{{Motivations}}
 Nécessité de vectoriser du code à la main :
 \\begin{{itemize}}
   \\item Jeux d'instructions multiples
@@ -48,10 +58,9 @@ L'optimisation d'un code de calcul passe par l'écriture d'un code spécifique
 pour chaque famille de processeur viblée.
 \nesline
 Besoin de réécrire ce code pour chaque nouveau jeu d'instructions à supporter.
-\\end{{scaleframe}}
+\\end{{frame}}
 
-\\subsection{{Principes}}
-\\begin{{scaleframe}}
+\\begin{{frame}}{{NSIMD}}{{Principes}}
 \\centering
 Utilisation des capacités des compilateurs à inliner des fonctions lors de la 
 phase d'optimisation.
@@ -65,13 +74,11 @@ phase d'optimisation.
 \\end{{itemize}}
 
 Un programme écrit à l'aide de NSIMD n'a besoin que d'être 
-\\textaccent{{recompilé}} pour l'architecture cible, et non 
-\\textaccent{{réécrit}}.
-\\end{{scaleframe}}
+\\textcolor{{primary}}{{recompilé}} pour l'architecture cible, et non 
+\\textcolor{{primary}}{{réécrit}}.
+\\end{{frame}}
 
-\\section{{Application}}
-\\subsection{{Calcul d'éléments finis spectraux 3D}}
-\\begin{{scaleframe}}
+\\begin{{frame}}{{Application}}{{Calcul d'éléments finis spectraux 3D}}
 \\centering
 EFISPEC3D\\footnote{{http://efispec.free.fr/}} est une bibliothèque logicielle de 
 simulation sismique utilisant la méthode de éléments spectraux finis en 3D.
@@ -84,10 +91,9 @@ simulation sismique utilisant la méthode de éléments spectraux finis en 3D.
   \\item Très utilisée pour la simulation numérique
   \\item Nécessité d'optimiser le code manuellement
 \\end{{itemize}}
-\\end{{scaleframe}}
+\\end{{frame}}
 
-\\subsection{{Utilisation de NSIMD sur EFISPEC3D}}
-\\begin{{scaleframe}}
+\\begin{{frame}}{{Application}}{{Utilisation de NSIMD sur EFISPEC3D}}
 Utilisation de NSIMD pour la vectorisation du noyau de calcul de l'algorithme
 EFISPEC3D.
 \\newline
@@ -97,9 +103,8 @@ Comparaison de NSIMD par rapport aux instructions natives pour :
   \\item AACH64
 \\end{{itemize}}
 Tests compilés avec {comp} sur un processeur {arch}.
-\\end{{scaleframe}}
+\\end{{frame}}
 
-\\subsection{{Résultats}}
 {benches}
 
 \\end{{document}}
@@ -109,9 +114,9 @@ Tests compilés avec {comp} sur un processeur {arch}.
 ## -----------------------------------------------------------------------------
 
 results_template = '''\
-\\begin{{scaleframe}}
+\\begin{{frame}}{{Résultats}}
 {results}
-\\end{{scaleframe}}
+\\end{{frame}}
 '''
 def gen_benches_list(graph_list, lang='fr'):
 		ret = ''
