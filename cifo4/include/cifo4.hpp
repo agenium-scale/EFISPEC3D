@@ -1,31 +1,65 @@
 #include <vector>
 #include <cstdint>
 #include <ctime>
+#include <cstdlib>
 #include <algorithm>
 
-#include <boost/align/aligned_allocator.hpp>
+// ----------------------------------------------------------------------------
+// C++11 allocator
 
+template <typename T> struct allocator {
+  using value_type = T;
 
-extern std::vector< uint32_t, boost::alignment::aligned_allocator< uint32_t, 32 > > ig_hexa_gll_glonum;
+  allocator() = default;
 
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_displacement;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_weight;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_lagrange_deriv;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_acceleration;
+  template <typename S> allocator(allocator<S> const &) {}
 
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidx;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidy;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidz;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdx;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdy;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdz;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedx;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedy;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedz;
+  T *allocate(std::size_t n) {
+    if (n > std::size_t(-1) / sizeof(T)) {
+      throw std::bad_alloc();
+    }
+    T *ptr;
+    if (::posix_memalign((void **)&ptr, 32, n * sizeof(T)) == 0) {
+      return ptr;
+    }
+    throw std::bad_alloc();
+  }
 
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovp2;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovs2;
-extern std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_jacobian_det;
+  void deallocate(T *ptr, std::size_t) { ::free((void *)ptr); }
+};
+
+template <class T, class S>
+bool operator==(allocator<T> const &, allocator<S> const &) {
+  return true;
+}
+
+template <class T, class S>
+bool operator!=(allocator<T> const &, allocator<S> const &) {
+  return false;
+}
+
+// ----------------------------------------------------------------------------
+
+extern std::vector< uint32_t, allocator< uint32_t > > ig_hexa_gll_glonum;
+
+extern std::vector< float, allocator< float > > rg_gll_displacement;
+extern std::vector< float, allocator< float > > rg_gll_weight;
+extern std::vector< float, allocator< float > > rg_gll_lagrange_deriv;
+extern std::vector< float, allocator< float > > rg_gll_acceleration;
+
+extern std::vector< float, allocator< float > > rg_hexa_gll_dxidx;
+extern std::vector< float, allocator< float > > rg_hexa_gll_dxidy;
+extern std::vector< float, allocator< float > > rg_hexa_gll_dxidz;
+extern std::vector< float, allocator< float > > rg_hexa_gll_detdx;
+extern std::vector< float, allocator< float > > rg_hexa_gll_detdy;
+extern std::vector< float, allocator< float > > rg_hexa_gll_detdz;
+extern std::vector< float, allocator< float > > rg_hexa_gll_dzedx;
+extern std::vector< float, allocator< float > > rg_hexa_gll_dzedy;
+extern std::vector< float, allocator< float > > rg_hexa_gll_dzedz;
+
+extern std::vector< float, allocator< float > > rg_hexa_gll_rhovp2;
+extern std::vector< float, allocator< float > > rg_hexa_gll_rhovs2;
+extern std::vector< float, allocator< float > > rg_hexa_gll_jacobian_det;
 
 
 void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end );

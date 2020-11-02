@@ -11,27 +11,27 @@
 #define IDX4( m, l, k, iel ) ( 125 * iel + 25 * k + 5 * l + m )
 
 
-std::vector< uint32_t, boost::alignment::aligned_allocator< uint32_t, 32 > > ig_hexa_gll_glonum;
+std::vector< uint32_t, allocator< uint32_t> > ig_hexa_gll_glonum;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_displacement;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_weight;
+std::vector< float, allocator< float> > rg_gll_displacement;
+std::vector< float, allocator< float> > rg_gll_weight;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_lagrange_deriv;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_acceleration;
+std::vector< float, allocator< float> > rg_gll_lagrange_deriv;
+std::vector< float, allocator< float> > rg_gll_acceleration;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidz;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdz;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedz;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidx;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidy;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidz;
+std::vector< float, allocator< float> > rg_hexa_gll_detdx;
+std::vector< float, allocator< float> > rg_hexa_gll_detdy;
+std::vector< float, allocator< float> > rg_hexa_gll_detdz;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedx;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedy;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedz;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovp2;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovs2;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_jacobian_det;
+std::vector< float, allocator< float> > rg_hexa_gll_rhovp2;
+std::vector< float, allocator< float> > rg_hexa_gll_rhovs2;
+std::vector< float, allocator< float> > rg_hexa_gll_jacobian_det;
 
 
 void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end )
@@ -251,14 +251,14 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
           auto fac3 = rg_gll_weight[ m ]*rg_gll_weight[ l ];
 
           auto index = ig_hexa_gll_glonum[ IDX4( m, l, k, iel ) ] - 1;
-          
+
           rg_gll_acceleration[ 0 + 3 * index ] -= (fac1 * tmpx1 + fac2 * tmpx2 + fac3 * tmpx3);
           rg_gll_acceleration[ 1 + 3 * index ] -= (fac1 * tmpy1 + fac2 * tmpy2 + fac3 * tmpy3);
-          rg_gll_acceleration[ 2 + 3 * index ] -= (fac1 * tmpz1 + fac2 * tmpz2 + fac3 * tmpz3);          
+          rg_gll_acceleration[ 2 + 3 * index ] -= (fac1 * tmpz1 + fac2 * tmpz2 + fac3 * tmpz3);
         }
       }
     }
 
   }
-  
+
 }

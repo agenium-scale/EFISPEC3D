@@ -9,7 +9,7 @@
  * Fill a std::vector from a file.
  */
 template < typename T >
-void vfill( std::string const filename, std::vector< T, boost::alignment::aligned_allocator< T, 32 >  > & v )
+void vfill( std::string const filename, std::vector< T, allocator< T>  > & v )
 {
   uint32_t dims = 0;
   std::ifstream ifs( filename , std::ios_base::in
@@ -35,7 +35,7 @@ void vfill( std::string const filename, std::vector< T, boost::alignment::aligne
  * Save a vector to a file.
  */
 template < typename T >
-void save( std::string const filename, std::vector< T, boost::alignment::aligned_allocator< T, 32 >  > & v )
+void save( std::string const filename, std::vector< T, allocator< T>  > & v )
 {
   uint32_t dims = 2;
   uint32_t dim = 3;
@@ -75,7 +75,7 @@ int main( int argc, char * argv[] )
   vfill( "../data/rg_gll_weight.dat", rg_gll_weight );
   vfill( "../data/rg_gll_acceleration_before_loop_iel.dat", rg_gll_acceleration );
 
-  std::vector< float, boost::alignment::aligned_allocator< float, 32 > > out_ref;
+  std::vector< float, allocator< float> > out_ref;
   vfill( "../data/rg_gll_acceleration_after_loop_iel.dat", out_ref );
 
 

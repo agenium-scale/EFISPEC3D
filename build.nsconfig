@@ -1,0 +1,94 @@
+# MIT License
+#
+# Copyright (c) 2020 Agenium Scale
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+## Get OS/Compiler specific file extensions
+
+set o     = @obj_ext
+set exe   = @exe_ext
+set root  = @source_dir
+set build = @build_dir
+set root  = @source_dir
+
+## Some defaults
+
+ifnot_set "NSIMD compilation flags" nsimd = -lnsimd_cpu
+ifnot_set "SIMD extension to use" simd = cpu
+
+## Targets for compilation
+
+set src_for_cpu            = $root$/cifo4/src/cifo4-local.cpp
+set src_for_avx            = $root$/cifo4/src/cifo4-avx-local.cpp
+set src_for_neon128        = $root$/cifo4/src/cifo4-neon-local.cpp
+set src_for_aarch64        = $root$/cifo4/src/cifo4-neon-local.cpp
+set src_for_sve            = $root$/cifo4/src/cifo4-sve-local.cpp
+set src_for_sve128         = $root$/cifo4/src/cifo4-sve-local.cpp
+set src_for_sve256         = $root$/cifo4/src/cifo4-sve-local.cpp
+set src_for_sve512         = $root$/cifo4/src/cifo4-sve-local.cpp 
+set src_for_sve1024        = $root$/cifo4/src/cifo4-sve-local.cpp
+set src_for_sve2048        = $root$/cifo4/src/cifo4-sve-local.cpp
+set src_for_nsimd-sse42    = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-avx      = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-avx512   = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-neon128  = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-aarch64  = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-sve      = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-sve128   = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-sve256   = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-sve512   = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp 
+set src_for_nsimd-sve1024  = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+set src_for_nsimd-sve2048  = $root$/cifo4/src/cifo4-nsimd-adv-local.cpp
+
+## SIMD compiler flags
+
+set cflags_for_cpu            = 
+set cflags_for_avx            = -mavx
+set cflags_for_neon128        = -mneon128
+set cflags_for_aarch64        = -maarch64
+set cflags_for_sve            = -msve
+set cflags_for_sve128         = -msve128
+set cflags_for_sve256         = -msve256
+set cflags_for_sve512         = -msve512
+set cflags_for_sve1024        = -msve1024
+set cflags_for_sve2048        = -msve2048
+set cflags_for_nsimd-sse42    = -msse42 -DSSE42
+set cflags_for_nsimd-avx      = -mavx -mfma -DAVX -DFMA
+set cflags_for_nsimd-avx512   = -mavx512_skylake -DAVX512_SKYLAKE
+set cflags_for_nsimd-neon128  = -mneon128 -DNEON128
+set cflags_for_nsimd-aarch64  = -maarch64 -DAARCH64
+set cflags_for_nsimd-sve      = -msve -DSVE
+set cflags_for_nsimd-sve128   = -msve128 -DSVE128
+set cflags_for_nsimd-sve256   = -msve256 -DSVE256
+set cflags_for_nsimd-sve512   = -msve512 -DSVE512
+set cflags_for_nsimd-sve1024  = -msve1024 -DSVE1024
+set cflags_for_nsimd-sve2048  = -msve2048 -DSVE2048
+
+## Some defaults
+
+set flags = -Wall -std=c++11 -O3 -g -I$root$/cifo4/include
+
+## Default building rules
+
+phony all deps cifo4$exe
+
+build_file cifo4$exe autodeps ${src_for_$simd$} $root$/cifo4/src/main.cpp
+	c++ $flags ${cflags_for_$simd$} $nsimd @in -o @out
+

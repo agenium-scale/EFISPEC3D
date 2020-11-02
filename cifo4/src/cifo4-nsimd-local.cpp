@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include <nsimd.hpp>
+#include <nsimd/nsimd-all.hpp>
 
 #include <cifo4.hpp>
 
@@ -12,34 +12,34 @@
 #define IDX4( m, l, k, iel ) ( 125 * (iel) + 25 * (k) + 5 * (l) + (m) )
 
 
-std::vector< uint32_t, boost::alignment::aligned_allocator< uint32_t, 32 > > ig_hexa_gll_glonum;
+std::vector< uint32_t, allocator< uint32_t> > ig_hexa_gll_glonum;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_displacement;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_weight;
+std::vector< float, allocator< float> > rg_gll_displacement;
+std::vector< float, allocator< float> > rg_gll_weight;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_lagrange_deriv;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_gll_acceleration;
+std::vector< float, allocator< float> > rg_gll_lagrange_deriv;
+std::vector< float, allocator< float> > rg_gll_acceleration;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dxidz;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_detdz;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedx;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedy;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_dzedz;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidx;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidy;
+std::vector< float, allocator< float> > rg_hexa_gll_dxidz;
+std::vector< float, allocator< float> > rg_hexa_gll_detdx;
+std::vector< float, allocator< float> > rg_hexa_gll_detdy;
+std::vector< float, allocator< float> > rg_hexa_gll_detdz;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedx;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedy;
+std::vector< float, allocator< float> > rg_hexa_gll_dzedz;
 
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovp2;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_rhovs2;
-std::vector< float, boost::alignment::aligned_allocator< float, 32 > > rg_hexa_gll_jacobian_det;
+std::vector< float, allocator< float> > rg_hexa_gll_rhovp2;
+std::vector< float, allocator< float> > rg_hexa_gll_rhovs2;
+std::vector< float, allocator< float> > rg_hexa_gll_jacobian_det;
 
 
 
 void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end )
 {
   auto const len = nsimd::len( f32{} );
-  
+
   float rl_displacement_gll[5*5*5*3*len ];
 
   float local[ 5 * 5 * 5 * 9 * len ];
@@ -59,7 +59,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
   // Add another iota with a parameter for the increment to simplify and generate only one svindex instruction ?
   // auto vstrides = nsimd::iota( 125u, u32{} );
   auto vstrides = nsimd::set1( 125u, u32{} ) * nsimd::iota( u32{} );
-  
+
   for( std::size_t iel = elt_start ; iel < elt_end; iel += len )
     {
       auto mask = simd::mask_for_loop_tail( iel, elt_end, u32{} );
@@ -94,7 +94,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 	      for( std::size_t m = 0 ; m < 5 ; ++m )
 		{
 		  auto coeff = nsimd::set1( rg_gll_lagrange_deriv[ IDX2( 0, m ) ], f32{} );
-		  
+
 		  auto index = 0 + 3 * IDX3( 0, l, k );
 
 		  auto duxdxi = nsimd::loada( &rl_displacement_gll[ len * ( 0 + index ) ], f32{} ) * coeff;
@@ -138,25 +138,25 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duxdet += nsimd::loada( &rl_displacement_gll[ len * ( 0 + 3 * IDX3( m, 1, k ) ) ], f32{} ) * coeff;
 		  duydet += nsimd::loada( &rl_displacement_gll[ len * ( 1 + 3 * IDX3( m, 1, k ) ) ], f32{} ) * coeff;
 		  duzdet += nsimd::loada( &rl_displacement_gll[ len * ( 2 + 3 * IDX3( m, 1, k ) ) ], f32{} ) * coeff;
-		  
+
 		  coeff = nsimd::set1( rg_gll_lagrange_deriv[ IDX2( 2, l ) ], f32{} );
 
 		  duxdet += nsimd::loada( &rl_displacement_gll[ len * ( 0 + 3 * IDX3( m, 2, k ) ) ], f32{} ) * coeff;
 		  duydet += nsimd::loada( &rl_displacement_gll[ len * ( 1 + 3 * IDX3( m, 2, k ) ) ], f32{} ) * coeff;
 		  duzdet += nsimd::loada( &rl_displacement_gll[ len * ( 2 + 3 * IDX3( m, 2, k ) ) ], f32{} ) * coeff;
-		  
+
 		  coeff = nsimd::set1( rg_gll_lagrange_deriv[ IDX2( 3, l ) ], f32{} );
 
 		  duxdet += nsimd::loada( &rl_displacement_gll[ len * ( 0 + 3 * IDX3( m, 3, k ) ) ], f32{} ) * coeff;
 		  duydet += nsimd::loada( &rl_displacement_gll[ len * ( 1 + 3 * IDX3( m, 3, k ) ) ], f32{} ) * coeff;
 		  duzdet += nsimd::loada( &rl_displacement_gll[ len * ( 2 + 3 * IDX3( m, 3, k ) ) ], f32{} ) * coeff;
-		  
+
 		  coeff = nsimd::set1( rg_gll_lagrange_deriv[ IDX2( 4, l ) ], f32{} );
 
 		  duxdet += nsimd::loada( &rl_displacement_gll[ len * ( 0 + 3 * IDX3( m, 4, k ) ) ], f32{} ) * coeff;
 		  duydet += nsimd::loada( &rl_displacement_gll[ len * ( 1 + 3 * IDX3( m, 4, k ) ) ], f32{} ) * coeff;
 		  duzdet += nsimd::loada( &rl_displacement_gll[ len * ( 2 + 3 * IDX3( m, 4, k ) ) ], f32{} ) * coeff;
-		  
+
 
 		  //
 
@@ -191,7 +191,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duzdze += nsimd::loada( &rl_displacement_gll[ len * ( 2 + 3 * IDX3( m, l, 4 ) ) ], f32{} ) * coeff;
 
 		  //
-         
+
                   auto lid = IDX3( m, l, k );
 		  auto id  = iel * 125 + lid;
 
@@ -202,11 +202,11 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  auto duxdx = duxdxi * dxidx + duxdet * detdx + duxdze * dzedx;
 		  auto duydx = duydxi * dxidx + duydet * detdx + duydze * dzedx;
 		  auto duzdx = duzdxi * dxidx + duzdet * detdx + duzdze * dzedx;
-		  
+
 	          auto dxidy = nsimd::mask_gather( mask, &rg_hexa_gll_dxidy[ id ], vstrides, f32{} );
 	          auto detdy = nsimd::mask_gather( mask, &rg_hexa_gll_detdy[ id ], vstrides, f32{} );
 	          auto dzedy = nsimd::mask_gather( mask, &rg_hexa_gll_dzedy[ id ], vstrides, f32{} );
-	  
+
 		  auto duxdy = duxdxi * dxidy + duxdet * detdy + duxdze * dzedy;
 		  auto duydy = duydxi * dxidy + duydet * detdy + duydze * dzedy;
 		  auto duzdy = duzdxi * dxidy + duzdet * detdy + duzdze * dzedy;
@@ -245,7 +245,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  nsimd::storea( &intpz1[ IDX3( m, l, k ) ], tmp * (tauxz*dxidx+tauyz*dxidy+tauzz*dxidz), f32{} );
 		  nsimd::storea( &intpz2[ IDX3( m, l, k ) ], tmp * (tauxz*detdx+tauyz*detdy+tauzz*detdz), f32{} );
 		  nsimd::storea( &intpz3[ IDX3( m, l, k ) ], tmp * (tauxz*dzedx+tauyz*dzedy+tauzz*dzedz), f32{} );
-		  
+
                }
 	    }
 	}
@@ -330,7 +330,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		    + nsimd::loada( &intpz3[ IDX3( m, l, 4 ) ], f32{} ) * c4;
 
 		  //
-		  
+
 		  auto fac1 = nsimd::set1( rg_gll_weight[ l ] * rg_gll_weight[ k ], f32{} );
 		  auto fac2 = nsimd::set1( rg_gll_weight[ m ] * rg_gll_weight[ k ], f32{} );
 		  auto fac3 = nsimd::set1( rg_gll_weight[ m ] * rg_gll_weight[ l ], f32{} );
@@ -357,7 +357,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		}
 	    }
 	}
-    
+
     }
 
 }
