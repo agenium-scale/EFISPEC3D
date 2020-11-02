@@ -51,7 +51,7 @@ def draw_graph(output_filename, title, data):
             bars[i].set_color('cadetblue')
         ax.text(0, i, ' {:0.2f}'.format(values[i]), color='black', va='center')
     if title != 'ns/day':
-        ax.set(title=title, xlabel='seconds')
+        ax.set(title=title, xlabel='milliseconds')
     else:
         ax.set(title=title)
     plt.gca().invert_yaxis()
