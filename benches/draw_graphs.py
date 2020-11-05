@@ -60,6 +60,14 @@ def draw_graph(output_filename, title, data):
 
 # -----------------------------------------------------------------------------
 
+def avg_of_median(v):
+    v.sort()
+    i0 = len(v) // 4
+    i1 = max(i0, 3 * len(v) // 4)
+    return sum(v[i0:i1]) / (i1 - i0 + 1)
+
+# -----------------------------------------------------------------------------
+
 if __name__ == "__main__":
     res = dict()
     for filename in sys.argv[1:]:
@@ -69,6 +77,10 @@ if __name__ == "__main__":
             continue
         ext = ' '.join((filename.split('/')[-1]).split('-')[0:-1]).upper()
         with open(filename) as fin:
-            res[ext] = int(fin.read().strip())
+            v = []
+            for line in fin:
+                if line.strip() != '':
+                    v.append(float(line.strip()))
+            res[ext] = int(avg_of_median(v))
     draw_graph('timings.pdf', 'Timings', res)
 
