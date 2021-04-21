@@ -1,3 +1,18 @@
+// Copyright (C) 2021  Sylvain Jubertie
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include <cstddef>
 #include <iostream>
 #include <iomanip>
@@ -62,7 +77,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
   __m256 * intpz3 = &local[ 1000 ];
 
   //std::cout << std::setprecision(20) << std::endl;
-  
+
   //std::cout << "a=" << rg_gll_acceleration[ 7490308 ] << std::endl;
 
   for( std::size_t iel = elt_start ; iel < elt_end ; iel+=8 )
@@ -102,7 +117,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
         }
       }
     }
-    
+
     for( std::size_t k = 0 ; k < 5 ; ++k )
     {
       for( std::size_t l = 0 ; l < 5 ; ++l )
@@ -406,7 +421,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
           auto fac1 = _mm256_set1_ps( rg_gll_weight[ l ] ) * _mm256_set1_ps( rg_gll_weight[ k ] );
           auto fac2 = _mm256_set1_ps( rg_gll_weight[ m ] ) * _mm256_set1_ps( rg_gll_weight[ k ] );
           auto fac3 = _mm256_set1_ps( rg_gll_weight[ m ] ) * _mm256_set1_ps( rg_gll_weight[ l ] );
-          
+
           auto rx = fac1 * tmpx1 + fac2 * tmpx2 + fac3 * tmpx3;
           auto ry = fac1 * tmpy1 + fac2 * tmpy2 + fac3 * tmpy3;
           auto rz = fac1 * tmpz1 + fac2 * tmpz2 + fac3 * tmpz3;
@@ -414,7 +429,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
           float tx[ 8 ] __attribute__((aligned(32)));//alignas(32);
           float ty[ 8 ] __attribute__((aligned(32)));//alignas(32);
           float tz[ 8 ] __attribute__((aligned(32)));//alignas(32);
-          
+
           _mm256_store_ps( tx, rx );
           _mm256_store_ps( ty, ry );
           _mm256_store_ps( tz, rz );
@@ -431,7 +446,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
         }
       }
     }
-    
+
   }
 
 }
