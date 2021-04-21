@@ -1,3 +1,18 @@
+// Copyright (C) 2021  Sylvain Jubertie
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include <cstddef>
 #include <iostream>
 #include <iomanip>
@@ -110,7 +125,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
         std::cout << rl_displacement_gll[ i ] << ' ';
       }
       std::cout << std::endl;
-   */ 
+   */
       for( std::size_t k = 0 ; k < 5 ; ++k )
 	{
 	  for( std::size_t l = 0 ; l < 5 ; ++l )
@@ -176,7 +191,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duxdet = svmla_z( mask, duxdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 0 + 3 * IDX3( m, 1, k ) ) ] ), coeff );
 		  duydet = svmla_z( mask, duydet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 1 + 3 * IDX3( m, 1, k ) ) ] ), coeff );
 		  duzdet = svmla_z( mask, duzdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 2 + 3 * IDX3( m, 1, k ) ) ] ), coeff );
-		  
+
                   //print( duxdet );
 
 		  coeff = rg_gll_lagrange_deriv[ IDX2( 2, l ) ];
@@ -184,7 +199,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duxdet = svmla_z( mask, duxdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 0 + 3 * IDX3( m, 2, k ) ) ] ), coeff );
 		  duydet = svmla_z( mask, duydet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 1 + 3 * IDX3( m, 2, k ) ) ] ), coeff );
 		  duzdet = svmla_z( mask, duzdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 2 + 3 * IDX3( m, 2, k ) ) ] ), coeff );
-		  
+
                   //print( duxdet );
 
 		  coeff = rg_gll_lagrange_deriv[ IDX2( 3, l ) ];
@@ -192,7 +207,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duxdet = svmla_z( mask, duxdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 0 + 3 * IDX3( m, 3, k ) ) ] ), coeff );
 		  duydet = svmla_z( mask, duydet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 1 + 3 * IDX3( m, 3, k ) ) ] ), coeff );
 		  duzdet = svmla_z( mask, duzdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 2 + 3 * IDX3( m, 3, k ) ) ] ), coeff );
-		  
+
                   //print( duxdet );
 
 		  coeff = rg_gll_lagrange_deriv[ IDX2( 4, l ) ];
@@ -200,7 +215,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  duxdet = svmla_z( mask, duxdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 0 + 3 * IDX3( m, 4, k ) ) ] ), coeff );
 		  duydet = svmla_z( mask, duydet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 1 + 3 * IDX3( m, 4, k ) ) ] ), coeff );
 		  duzdet = svmla_z( mask, duzdet, svld1( mask, &rl_displacement_gll[ svcntw() * ( 2 + 3 * IDX3( m, 4, k ) ) ] ), coeff );
-		  
+
                   //print( duxdet );
 
                   //std::cout << std::endl;
@@ -244,27 +259,27 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 
 
 		  //
-         
+
                   auto lid = IDX3( m, l, k );
 		  auto id  = iel * 125 + lid;
-	    
+
 		  auto dxidx = svld1_gather_index( mask, &rg_hexa_gll_dxidx[ id ], vstrides );
 		  auto detdx = svld1_gather_index( mask, &rg_hexa_gll_detdx[ id ], vstrides );
                   auto dzedx = svld1_gather_index( mask, &rg_hexa_gll_dzedx[ id ], vstrides );
-		  
+
                   //print( dxidx );
-	  
+
 		  auto duxdx = svmla_z( mask, svmla_z( mask, svmul_z( mask, duxdxi, dxidx ), duxdet, detdx ), duxdze, dzedx );
 		  auto duydx = svmla_z( mask, svmla_z( mask, svmul_z( mask, duydxi, dxidx ), duydet, detdx ), duydze, dzedx );
 		  auto duzdx = svmla_z( mask, svmla_z( mask, svmul_z( mask, duzdxi, dxidx ), duzdet, detdx ), duzdze, dzedx );
 
 		  //print( duxdx );
-   
+
 	          auto dxidy = svld1_gather_index( mask, &rg_hexa_gll_dxidy[ id ], vstrides );
 	          auto detdy = svld1_gather_index( mask, &rg_hexa_gll_detdy[ id ], vstrides );
 	          auto dzedy = svld1_gather_index( mask, &rg_hexa_gll_dzedy[ id ], vstrides );
 		  //print( duxdet )
-	  
+
 		  auto duxdy = svmla_z( mask, svmla_z( mask, svmul_z( mask, duxdxi, dxidy ), duxdet, detdy ), duxdze, dzedy );
 		  auto duydy = svmla_z( mask, svmla_z( mask, svmul_z( mask, duydxi, dxidy ), duydet, detdy ), duydze, dzedy );
 		  auto duzdy = svmla_z( mask, svmla_z( mask, svmul_z( mask, duzdxi, dxidy ), duzdet, detdy ), duzdze, dzedy );
@@ -319,7 +334,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  svst1( mask, &intpz1[ svcntw() * lid ], svmul_z( mask, tmp, svmla_z( mask, svmla_z( mask, svmul_z( mask, tauxz, dxidx ), tauyz, dxidy ), tauzz, dxidz ) ) );
 		  svst1( mask, &intpz2[ svcntw() * lid ], svmul_z( mask, tmp, svmla_z( mask, svmla_z( mask, svmul_z( mask, tauxz, detdx ), tauyz, detdy ), tauzz, detdz ) ) );
 		  svst1( mask, &intpz3[ svcntw() * lid ], svmul_z( mask, tmp, svmla_z( mask, svmla_z( mask, svmul_z( mask, tauxz, dzedx ), tauyz, dzedy ), tauzz, dzedz ) ) );
-	/*	
+	/*
                   for( std:: size_t i = 0 ; i < svcntw() ; ++i )
                   {
                     std::cout << intpz1[ lid + i ] << ' ';
@@ -342,7 +357,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  auto c2 = rg_gll_lagrange_deriv[ IDX2( m, 2 ) ] * rg_gll_weight[ 2 ];
 		  auto c3 = rg_gll_lagrange_deriv[ IDX2( m, 3 ) ] * rg_gll_weight[ 3 ];
 		  auto c4 = rg_gll_lagrange_deriv[ IDX2( m, 4 ) ] * rg_gll_weight[ 4 ];
-		  
+
 		  auto tmpx1 = svmla_z( mask,
 					svmla_z( mask,
 						 svmla_z( mask,
@@ -557,7 +572,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  auto fac1 = rg_gll_weight[ l ] * rg_gll_weight[ k ];
 		  auto fac2 = rg_gll_weight[ m ] * rg_gll_weight[ k ];
 		  auto fac3 = rg_gll_weight[ m ] * rg_gll_weight[ l ];
-          
+
 		  auto rx = svmla_z( mask,
 				     svmla_z( mask,
 					      svmul_z( mask, tmpx1, fac1 ),
@@ -567,7 +582,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 				     tmpx3,
 				     fac3
 				     );
-		  
+
 		  auto ry = svmla_z( mask,
 				     svmla_z( mask,
 					      svmul_z( mask, tmpy1, fac1 ),
@@ -592,7 +607,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		  //print( ry );
 		  //print( rz );
                   //std::cout << std::endl;
-		  
+
 		  auto lid = IDX3( m, l, k );
 		  auto gids = svadd_z( mask, base, lid );
 
@@ -617,7 +632,7 @@ void compute_internal_forces_order4( std::size_t elt_start, std::size_t elt_end 
 		}
 	    }
 	}
-    
+
     }
 
 }
