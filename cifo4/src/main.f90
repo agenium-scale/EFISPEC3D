@@ -1,4 +1,6 @@
-! Copyright (C) 2009 Florent DE MARTIN
+! Copyright (C) 2009 Florent DE MARTIN. Contact: f.demartin@brgm.fr
+!
+! EFISPEC3D is available at https://gitlab.brgm.fr/brgm/efispec3d or at http://efispec.free.fr
 !
 ! This program is free software: you can redistribute it and/or modify
 ! it under the terms of the GNU General Public License as published by
